@@ -121,7 +121,7 @@ class LinkedList:
 
         return item_to_delete_data
 
-    def delete_from_end(self):
+    def delete_from_tail(self):
         """
             Remove the last item from the list
         :return: value from the removed item
@@ -143,6 +143,8 @@ class LinkedList:
         """
         if self.is_empty():
             raise IndexError("Delete from empty list!")
+        elif index == 0:
+            return self.delete_from_head()
 
         index_node, parent_node = self.__get_index_node_and_parent(index)
         parent_node.next = index_node.next
