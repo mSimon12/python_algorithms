@@ -1,5 +1,5 @@
 import pytest
-from src.data_structures import LinkedList
+from src.data_structures import LinkedList, Queue, Stack
 
 class TestLinkedList:
 
@@ -95,7 +95,7 @@ class TestLinkedList:
         assert self.TEST_FLOAT == linked_list.delete_from_index(0), "Fail to remove item of type 'float' from index!"
 
     def test_delete_raise_exception(self, linked_list):
-        with pytest.raises(IndexError):
+        with pytest.raises(IndexError, match="Delete from empty list!"):
             linked_list.delete_from_head()
             linked_list.delete_from_index(5)
             linked_list.delete_from_tail()
@@ -116,3 +116,66 @@ class TestLinkedList:
         assert "c" == linked_list.get_index(-3), 'Fail to get value with negative index!'
         assert "d" == linked_list.get_index(-4), 'Fail to get value with negative index!'
 
+
+class TestQueue:
+
+    TEST_INT = 58
+    TEST_BOOL = True
+    TEST_STRING = "foobarfoobar"
+    TEST_FLOAT = 101.98
+
+    @pytest.fixture()
+    def queue_under_test(self):
+        return Queue()
+
+    def test_queue_fifo_order(self, queue_under_test):
+        queue_under_test.add(self.TEST_INT)
+        queue_under_test.add(self.TEST_BOOL)
+        queue_under_test.add(self.TEST_STRING)
+        queue_under_test.add(self.TEST_FLOAT)
+
+        assert 4 == len(queue_under_test), "Fail at queue len control!"
+        assert self.TEST_INT == queue_under_test.remove(), "Fail to process values in FIFO order!"
+        assert 3 == len(queue_under_test), "Fail at queue len control!"
+        assert self.TEST_BOOL == queue_under_test.remove(), "Fail to process values in FIFO order!"
+        assert 2 == len(queue_under_test), "Fail at queue len control!"
+        assert self.TEST_STRING == queue_under_test.remove(), "Fail to process values in FIFO order!"
+        assert 1 == len(queue_under_test), "Fail at queue len control!"
+        assert self.TEST_FLOAT == queue_under_test.remove(), "Fail to process values in FIFO order!"
+        assert 0 == len(queue_under_test), "Fail at queue len control!"
+
+    def test_dequeuing_empty_queue(self, queue_under_test):
+        with pytest.raises(IndexError, match="Delete from empty queue!"):
+            queue_under_test.remove()
+
+
+class TestStack:
+
+    TEST_INT = 58
+    TEST_BOOL = True
+    TEST_STRING = "foobarfoobar"
+    TEST_FLOAT = 101.98
+
+    @pytest.fixture()
+    def stack_under_test(self):
+        return Stack()
+
+    def test_stack_lifo_order(self, stack_under_test):
+        stack_under_test.add(self.TEST_INT)
+        stack_under_test.add(self.TEST_BOOL)
+        stack_under_test.add(self.TEST_STRING)
+        stack_under_test.add(self.TEST_FLOAT)
+
+        assert 4 == len(stack_under_test), "Fail at stack len control!"
+        assert self.TEST_FLOAT == stack_under_test.remove(), "Fail to process values in LIFO order!"
+        assert 3 == len(stack_under_test), "Fail at stack len control!"
+        assert self.TEST_STRING == stack_under_test.remove(), "Fail to process values in LIFO order!"
+        assert 2 == len(stack_under_test), "Fail at stack len control!"
+        assert self.TEST_BOOL == stack_under_test.remove(), "Fail to process values in LIFO order!"
+        assert 1 == len(stack_under_test), "Fail at stack len control!"
+        assert self.TEST_INT == stack_under_test.remove(), "Fail to process values in LIFO order!"
+        assert 0 == len(stack_under_test), "Fail at stack len control!"
+
+    def test_unstacking_empty_stack(self, stack_under_test):
+        with pytest.raises(IndexError, match="Delete from empty stack!"):
+            stack_under_test.remove()

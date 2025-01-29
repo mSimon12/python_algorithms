@@ -187,7 +187,10 @@ class Queue:
         self.__queue_data.add_at_tail(new_queue_value)
 
     def remove(self):
-        return self.__queue_data.delete_from_head()
+        try:
+            return self.__queue_data.delete_from_head()
+        except IndexError:
+            raise IndexError("Delete from empty queue!")
 
     def __len__(self):
         return self.__queue_data.__len__()
@@ -205,7 +208,10 @@ class Stack:
         self.__stack_data.add_at_head(new_queue_value)
 
     def remove(self):
-        return self.__stack_data.delete_from_head()
+        try:
+            return self.__stack_data.delete_from_head()
+        except IndexError:
+            raise IndexError("Delete from empty stack!")
 
     def __len__(self):
         return self.__stack_data.__len__()
