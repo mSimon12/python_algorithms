@@ -14,6 +14,7 @@ class LinkedList:
 
     def __init__(self):
         self.__head = None
+        self.__linked_list_length = 0
 
     def is_empty(self):
         """
@@ -70,7 +71,10 @@ class LinkedList:
         :param index: position to retrieve the data
         :return: data
         """
-        index_node, *_ =self.__get_index_node_and_parent(index)
+        if index < 0:
+            index = (self.__linked_list_length + index) % self.__linked_list_length
+
+        index_node, *_ = self.__get_index_node_and_parent(index)
         return index_node.data
 
     def add_at_head(self, new_value):
@@ -81,6 +85,7 @@ class LinkedList:
         """
         new_node = Node(new_value, self.__head)
         self.__head = new_node
+        self.__linked_list_length += 1
 
     def add_at_tail(self, new_value):
         """
@@ -93,6 +98,7 @@ class LinkedList:
         else:
             last_node, *_ = self.__get_last_node_and_parent()
             last_node.next = Node(new_value, None)
+        self.__linked_list_length += 1
 
     def add_at_index(self, new_value, index):
         """
@@ -106,6 +112,7 @@ class LinkedList:
 
         index_node, parent_node = self.__get_index_node_and_parent(index)
         parent_node.next = Node(new_value, index_node)
+        self.__linked_list_length += 1
 
     def delete_from_head(self):
         """
@@ -118,6 +125,7 @@ class LinkedList:
 
         item_to_delete_data = self.__head.data
         self.__head = self.__head.next
+        self.__linked_list_length -= 1
 
         return item_to_delete_data
 
@@ -132,6 +140,7 @@ class LinkedList:
         last_node, parent_node = self.__get_last_node_and_parent()
         item_to_delete_data = last_node.data
 
+        self.__linked_list_length -= 1
         parent_node.next = None
         return item_to_delete_data
 
@@ -149,7 +158,11 @@ class LinkedList:
         index_node, parent_node = self.__get_index_node_and_parent(index)
         parent_node.next = index_node.next
 
+        self.__linked_list_length -= 1
         return index_node.data
+
+    def __len__(self):
+        return self.__linked_list_length
 
     def __str__(self):
         current_node = self.__head
@@ -176,6 +189,9 @@ class Queue:
     def remove(self):
         return self.__queue_data.delete_from_head()
 
+    def __len__(self):
+        return self.__queue_data.__len__()
+
     def __str__(self):
         return self.__queue_data.__str__()
 
@@ -183,16 +199,19 @@ class Queue:
 class Stack:
 
     def __init__(self):
-        self.__queue_data = LinkedList()
+        self.__stack_data = LinkedList()
 
     def add(self, new_queue_value):
-        self.__queue_data.add_at_head(new_queue_value)
+        self.__stack_data.add_at_head(new_queue_value)
 
     def remove(self):
-        return self.__queue_data.delete_from_head()
+        return self.__stack_data.delete_from_head()
+
+    def __len__(self):
+        return self.__stack_data.__len__()
 
     def __str__(self):
-        return self.__queue_data.__str__()
+        return self.__stack_data.__str__()
 
 
 class Tree:

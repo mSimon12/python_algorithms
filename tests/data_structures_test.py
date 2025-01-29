@@ -100,3 +100,19 @@ class TestLinkedList:
             linked_list.delete_from_index(5)
             linked_list.delete_from_tail()
 
+    def test_get_index(self, linked_list):
+        linked_list.add_at_head("a")
+        linked_list.add_at_head("b")
+        linked_list.add_at_head("c")
+        linked_list.add_at_head("d")
+
+        assert "a" == linked_list.get_index(3), 'Wrong value retrieved!'
+        assert "b" == linked_list.get_index(2), 'Wrong value retrieved!'
+        assert "c" == linked_list.get_index(1), 'Wrong value retrieved!'
+        assert "d" == linked_list.get_index(0), 'Wrong value retrieved!'
+
+        assert "a" == linked_list.get_index(-1), 'Fail to get value with negative index!'
+        assert "b" == linked_list.get_index(-2), 'Fail to get value with negative index!'
+        assert "c" == linked_list.get_index(-3), 'Fail to get value with negative index!'
+        assert "d" == linked_list.get_index(-4), 'Fail to get value with negative index!'
+
