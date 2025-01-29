@@ -97,7 +97,11 @@ class TestLinkedList:
     def test_delete_raise_exception(self, linked_list):
         with pytest.raises(IndexError, match="Delete from empty list!"):
             linked_list.delete_from_head()
+
+        with pytest.raises(IndexError, match="Delete from empty list!"):
             linked_list.delete_from_index(5)
+
+        with pytest.raises(IndexError, match="Delete from empty list!"):
             linked_list.delete_from_tail()
 
     def test_get_index(self, linked_list):
