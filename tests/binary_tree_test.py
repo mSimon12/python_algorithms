@@ -1,0 +1,3 @@
+
+class TestBinaryTree:
+    pass
