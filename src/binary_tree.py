@@ -27,6 +27,18 @@ class BinaryTree:
 
         return False
 
+    @staticmethod
+    def __hash_key(input_key):
+        """
+            Convert the key to a unique type to be processed as same for all request
+        :param input_key: key provided by the user
+        :return: hashed key
+        """
+        try:
+            return str(input_key)
+        except TypeError:
+            raise IndexError("Invalid key type! It must be hashable.")
+
     def __search_element(self, searched_key, start_node: TreeNode):
         """
             Search a node in the key according to the desired key
@@ -34,13 +46,15 @@ class BinaryTree:
         :param start_node: position to start the search
         :return: node with the searched key
         """
-        if (start_node is None) or (searched_key == start_node.key):
+        hashed_searched_key = self.__hash_key(searched_key)
+
+        if (start_node is None) or (hashed_searched_key == self.__hash_key(start_node.key)):
             return start_node
 
-        if searched_key <= start_node.key:
+        if hashed_searched_key <= self.__hash_key(start_node.key):
             return self.__search_element(searched_key, start_node.left)
         else:
-            return self.__search_element(searched_key, start_node.left)
+            return self.__search_element(searched_key, start_node.right)
 
     @staticmethod
     def __get_subtree_minimum(start_node: TreeNode):
@@ -102,7 +116,9 @@ class BinaryTree:
         :param parent_node: node parent to the new node
         :return: None
         """
-        if new_key < parent_node.key:
+        hashed_new_key = self.__hash_key(new_key)
+
+        if hashed_new_key < self.__hash_key(parent_node.key):
             if parent_node.left is None:
                 parent_node.left = TreeNode(new_key, data=new_key_data, parent=parent_node)
             else:
@@ -113,7 +129,7 @@ class BinaryTree:
             else:
                 self.__add_node(new_key, new_key_data, parent_node.right)
 
-    def insert_node(self, new_key:int, new_key_data = None):
+    def insert_node(self, new_key, new_key_data = None):
         """
             Inserts a new element to the Tree
         :param new_key: key from the new element
@@ -233,13 +249,19 @@ class BinaryTree:
 if __name__ == "__main__":
     my_binary_tree = BinaryTree()
 
-    my_binary_tree.insert_node(10, [10,52,"s"])
-    my_binary_tree.insert_node(55)
-    my_binary_tree.insert_node(5)
+    my_binary_tree.insert_node(True)
+    my_binary_tree.insert_node("a")
     my_binary_tree.insert_node(180)
-    my_binary_tree.insert_node(120)
+    my_binary_tree.insert_node(False)
+    my_binary_tree.insert_node("ba")
+    my_binary_tree.insert_node(181)
+    my_binary_tree.insert_node(121)
+    my_binary_tree.insert_node(12.1)
 
-    print(my_binary_tree.get_value(10))
     print(my_binary_tree.get_sorted_tree_keys())
+    print(my_binary_tree.get_sorted_tree_values())
 
+    for key in my_binary_tree.get_sorted_tree_keys():
+        print(key)
+        print(my_binary_tree.get_value(key))
 
