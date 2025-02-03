@@ -27,24 +27,6 @@ class BinaryTree:
 
         return False
 
-    def __in_order_walk(self, node: TreeNode):
-        if node is not None:
-            self.__in_order_walk(node.left)
-            print(f"{node.key}")
-            self.__in_order_walk(node.right)
-
-    def __pre_order_walk(self, node: TreeNode):
-        if node is not None:
-            print(f"{node.key}")
-            self.__pre_order_walk(node.left)
-            self.__pre_order_walk(node.right)
-
-    def __post_order_walk(self, node: TreeNode):
-        if node is not None:
-            self.__post_order_walk(node.left)
-            self.__post_order_walk(node.right)
-            print(f"{node.key}")
-
     def __search_element(self, searched_key, start_node: TreeNode):
         """
             Search a node in the key according to the desired key
@@ -211,14 +193,40 @@ class BinaryTree:
             raise IndexError("Invalid key!")
         return key_node.data
 
+    def __in_order_walk(self, node: TreeNode, result: list):
+        if node is not None:
+            self.__in_order_walk(node.left, result)
+            result.append(node)
+            self.__in_order_walk(node.right, result)
+
+    def __pre_order_walk(self, node: TreeNode, result: list):
+        if node is not None:
+            result.append(node)
+            self.__pre_order_walk(node.left, result)
+            self.__pre_order_walk(node.right, result)
+
+    def __post_order_walk(self, node: TreeNode, result: list):
+        if node is not None:
+            self.__post_order_walk(node.left, result)
+            self.__post_order_walk(node.right, result)
+            result.append(node)
+
+    def get_sorted_tree_keys(self):
+        sorted_nodes = []
+        self.__in_order_walk(self.__root, sorted_nodes)
+
+        sorted_keys = [node.key for node in sorted_nodes]
+        return sorted_keys
+
+    def get_sorted_tree_values(self):
+        sorted_nodes = []
+        self.__in_order_walk(self.__root, sorted_nodes)
+
+        sorted_values = [node.data for node in sorted_nodes]
+        return sorted_values
+
     def __str__(self):
         tree_string = "Tree"
-        self.__pre_order_walk(self.__root)
-        print()
-        self.__in_order_walk(self.__root)
-        print()
-        self.__post_order_walk(self.__root)
-        print()
         return tree_string
 
 
@@ -232,7 +240,6 @@ if __name__ == "__main__":
     my_binary_tree.insert_node(120)
 
     print(my_binary_tree.get_value(10))
-
-    # print(my_binary_tree)
+    print(my_binary_tree.get_sorted_tree_keys())
 
 
