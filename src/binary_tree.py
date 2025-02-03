@@ -52,13 +52,13 @@ class BinaryTree:
         :param start_node: position to start the search
         :return: node with the searched key
         """
-        if (searched_key == start_node.key) or (start_node is None):
+        if (start_node is None) or (searched_key == start_node.key):
             return start_node
 
         if searched_key <= start_node.key:
-            return self.__search_element(start_node.left, searched_key)
+            return self.__search_element(searched_key, start_node.left)
         else:
-            return self.__search_element(start_node.right, searched_key)
+            return self.__search_element(searched_key, start_node.left)
 
     @staticmethod
     def __get_subtree_minimum(start_node: TreeNode):
@@ -84,43 +84,76 @@ class BinaryTree:
 
         return start_node
 
-    def get_node_successor(self, node:TreeNode):
-        if node.right is not None:
-            return self.__get_subtree_minimum(node.right)
+    def get_node_successor(self, reference_node:TreeNode):
+        """
+            Get the node that succeeds the provided node
+        :param reference_node: node to have successor found
+        :return: successor node
+        """
+        if reference_node.right is not None:
+            return self.__get_subtree_minimum(reference_node.right)
 
-        while node.parent and (node == node.parent.right):
-            node = node.parent
+        while reference_node.parent and (reference_node == reference_node.parent.right):
+            reference_node = reference_node.parent
 
-        return node.parent
+        return reference_node.parent
 
-    def get_node_predecessor(self, node:TreeNode):
-        if node.left is not None:
-            return self.__get_subtree_maximum(node.left)
+    def get_node_predecessor(self, reference_node:TreeNode):
+        """
+                Get the node that proceeds the provided node
+        :param reference_node: node to have predecessor found
+        :return: predecessor node
+        """
+        if reference_node.left is not None:
+            return self.__get_subtree_maximum(reference_node.left)
 
-        while node.parent and (node == node.parent.left):
-            node = node.parent
+        while reference_node.parent and (reference_node == reference_node.parent.left):
+            reference_node = reference_node.parent
 
-        return node.parent
+        return reference_node.parent
 
-    def __add_node_at_best_point(self, new_key, new_key_data, parent_node: TreeNode):
+    def __add_node(self, new_key, new_key_data, parent_node: TreeNode):
+        """
+            Recurrent method for adding node to the right tree position
+        :param new_key: new key to be added
+        :param new_key_data: value associated to the key
+        :param parent_node: node parent to the new node
+        :return: None
+        """
         if new_key < parent_node.key:
             if parent_node.left is None:
                 parent_node.left = TreeNode(new_key, data=new_key_data, parent=parent_node)
             else:
-                self.__add_node_at_best_point(new_key, new_key_data, parent_node.left)
+                self.__add_node(new_key, new_key_data, parent_node.left)
         else:
             if parent_node.right is None:
                 parent_node.right = TreeNode(new_key, data=new_key_data, parent=parent_node)
             else:
-                self.__add_node_at_best_point(new_key, new_key_data, parent_node.right)
+                self.__add_node(new_key, new_key_data, parent_node.right)
 
     def insert_node(self, new_key:int, new_key_data = None):
+        """
+            Inserts a new element to the Tree
+        :param new_key: key from the new element
+        :param new_key_data: value from the new element
+        :return: None
+        """
         if self.is_empty():
             self.__root = TreeNode(new_key, data=new_key_data)
         else:
-            self.__add_node_at_best_point(new_key, new_key_data, self.__root)
+            node_exist = self.__search_element(new_key, self.__root)
+            if node_exist:
+                raise IndexError("Key already exists!")
+
+            self.__add_node(new_key, new_key_data, self.__root)
 
     def __transplant_node(self, replaced_node:TreeNode, moved_node:TreeNode):
+        """
+            Transplant node to a position of another node (moved_node >> replace_node
+        :param replaced_node: node to be substituted
+        :param moved_node: node having the position on tree changed
+        :return: None
+        """
         if replaced_node.parent is None:
             self.__root = moved_node
         elif replaced_node == replaced_node.parent.left:
@@ -132,7 +165,14 @@ class BinaryTree:
             moved_node.parent = replaced_node.parent
 
     def delete_node(self, key_to_delete):
+        """
+            Delete node with specified key from the Tree
+        :param key_to_delete: key from the element to be deleted
+        :return: None
+        """
         node_to_delete = self.__search_element(key_to_delete, self.__root)
+        if node_to_delete is None:
+            raise IndexError("Invalid key!")
 
         if node_to_delete.left is None:
             self.__transplant_node(node_to_delete, node_to_delete.right)
@@ -148,9 +188,27 @@ class BinaryTree:
             subtree_minimum.left = node_to_delete.left
             node_to_delete.left.parent = subtree_minimum
 
+    def set_value(self, key, element_data):
+        """
+            Update the value from an existing element
+        :param key: key from the node to receive a new value
+        :param element_data: value to be assigned to the node
+        :return: None
+        """
+        key_node = self.__search_element(key, self.__root)
+        if key_node is None:
+            raise IndexError("Invalid key!")
+        key_node.data = element_data
 
     def get_value(self, key):
+        """
+            Get the value from the node matching the desired key
+        :param key: key from the node be returned
+        :return: value from the requested node
+        """
         key_node = self.__search_element(key, self.__root)
+        if key_node is None:
+            raise IndexError("Invalid key!")
         return key_node.data
 
     def __str__(self):
