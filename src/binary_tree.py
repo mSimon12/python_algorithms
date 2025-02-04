@@ -1,7 +1,3 @@
-# BinaryTree property
-# Let x be a node in a binary search tree. If y is a node in the left subtree
-# of x, then y:key <= x:key. If y is a node in the right subtree of x, then
-# y:key >= x:key.
 
 class TreeNode:
 
@@ -272,26 +268,3 @@ class BinaryTree:
     def __str__(self):
         tree_string = "Tree"
         return tree_string
-
-
-if __name__ == "__main__":
-    # Usage example
-    my_binary_tree = BinaryTree()
-
-    my_binary_tree.insert_node(True)
-    my_binary_tree.insert_node("a")
-    my_binary_tree.insert_node(180)
-    my_binary_tree.insert_node(False)
-    my_binary_tree.insert_node("ba")
-    my_binary_tree.insert_node(181)
-    my_binary_tree.insert_node([10, 56])
-    my_binary_tree.insert_node(12.1)
-
-    print("Ascending order:")
-    print(my_binary_tree.get_sorted_tree_keys())
-    print(my_binary_tree.get_sorted_tree_values())
-
-    print("Descending order:")
-    print(my_binary_tree.get_sorted_tree_keys(reverse=True))
-    print(my_binary_tree.get_sorted_tree_values(reverse=True))
-
