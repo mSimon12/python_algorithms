@@ -220,12 +220,6 @@ class Stack:
         return self.__stack_data.__str__()
 
 
-class Tree:
-
-    def __init__(self):
-        pass
-
-
 if __name__ == "__main__":
     my_list = LinkedList()
 
