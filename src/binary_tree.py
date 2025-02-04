@@ -12,6 +12,7 @@ class TreeNode:
         self.left = None
         self.right = None
 
+
 class BinaryTree:
 
     def __init__(self):
@@ -96,7 +97,7 @@ class BinaryTree:
 
     def get_node_predecessor(self, reference_node:TreeNode):
         """
-                Get the node that proceeds the provided node
+            Get the node that proceeds the provided node
         :param reference_node: node to have predecessor found
         :return: predecessor node
         """
@@ -136,6 +137,11 @@ class BinaryTree:
         :param new_key_data: value from the new element
         :return: None
         """
+        if isinstance(new_key, list):
+            raise IndexError("Key must not be a List!")
+        elif isinstance(new_key, dict):
+            raise IndexError("Key must not be a Dict!")
+
         if self.is_empty():
             self.__root = TreeNode(new_key, data=new_key_data)
         else:
@@ -209,11 +215,17 @@ class BinaryTree:
             raise IndexError("Invalid key!")
         return key_node.data
 
-    def __in_order_walk(self, node: TreeNode, result: list):
+    def __in_order_walk_ascending(self, node: TreeNode, result: list):
         if node is not None:
-            self.__in_order_walk(node.left, result)
+            self.__in_order_walk_ascending(node.left, result)
             result.append(node)
-            self.__in_order_walk(node.right, result)
+            self.__in_order_walk_ascending(node.right, result)
+
+    def __in_order_walk_descending(self, node: TreeNode, result: list):
+        if node is not None:
+            self.__in_order_walk_descending(node.right, result)
+            result.append(node)
+            self.__in_order_walk_descending(node.left, result)
 
     def __pre_order_walk(self, node: TreeNode, result: list):
         if node is not None:
@@ -227,16 +239,32 @@ class BinaryTree:
             self.__post_order_walk(node.right, result)
             result.append(node)
 
-    def get_sorted_tree_keys(self):
+    def get_sorted_tree_keys(self, reverse=False):
+        """
+            Get the keys from the Tree sorted nodes
+        :param reverse: The reverse flag can be set to sort in descending order
+        :return: sorted nodes keys
+        """
         sorted_nodes = []
-        self.__in_order_walk(self.__root, sorted_nodes)
+        if reverse:
+            self.__in_order_walk_descending(self.__root, sorted_nodes)
+        else:
+            self.__in_order_walk_ascending(self.__root, sorted_nodes)
 
         sorted_keys = [node.key for node in sorted_nodes]
         return sorted_keys
 
-    def get_sorted_tree_values(self):
+    def get_sorted_tree_values(self, reverse=False):
+        """
+            Get the values from the Tree sorted nodes
+        :param reverse: The reverse flag can be set to sort in descending order
+        :return: sorted nodes values
+        """
         sorted_nodes = []
-        self.__in_order_walk(self.__root, sorted_nodes)
+        if reverse:
+            self.__in_order_walk_descending(self.__root, sorted_nodes)
+        else:
+            self.__in_order_walk_ascending(self.__root, sorted_nodes)
 
         sorted_values = [node.data for node in sorted_nodes]
         return sorted_values
@@ -247,6 +275,7 @@ class BinaryTree:
 
 
 if __name__ == "__main__":
+    # Usage example
     my_binary_tree = BinaryTree()
 
     my_binary_tree.insert_node(True)
@@ -255,13 +284,14 @@ if __name__ == "__main__":
     my_binary_tree.insert_node(False)
     my_binary_tree.insert_node("ba")
     my_binary_tree.insert_node(181)
-    my_binary_tree.insert_node(121)
+    my_binary_tree.insert_node([10, 56])
     my_binary_tree.insert_node(12.1)
 
+    print("Ascending order:")
     print(my_binary_tree.get_sorted_tree_keys())
     print(my_binary_tree.get_sorted_tree_values())
 
-    for key in my_binary_tree.get_sorted_tree_keys():
-        print(key)
-        print(my_binary_tree.get_value(key))
+    print("Descending order:")
+    print(my_binary_tree.get_sorted_tree_keys(reverse=True))
+    print(my_binary_tree.get_sorted_tree_values(reverse=True))
 
