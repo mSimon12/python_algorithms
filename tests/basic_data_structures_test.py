@@ -1,5 +1,5 @@
 import pytest
-from src.basic_data_structures import LinkedList, Queue, Stack
+from src.data_structures.basic_data_structures import LinkedList, Queue, Stack
 
 
 class TestLinkedList:

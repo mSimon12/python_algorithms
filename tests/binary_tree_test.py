@@ -1,7 +1,5 @@
-from re import match
-
 import pytest
-from src.binary_tree import BinaryTree
+from src.data_structures.binary_tree import BinaryTree
 
 class TestBinaryTree:
 
