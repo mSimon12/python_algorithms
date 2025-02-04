@@ -54,7 +54,7 @@ class LinkedList:
 
         count = 0
         current_node = self.__head
-        parent_node = current_node
+        parent_node = None
 
         while count != index:
             parent_node = current_node
@@ -100,18 +100,21 @@ class LinkedList:
             last_node.next = Node(new_value, None)
         self.__linked_list_length += 1
 
-    def add_at_index(self, new_value, index):
+    def add_at_index(self, index, new_value):
         """
             Add a new item to the specified index position
-        :param new_value: value to be added to the list
         :param index: position to add the new item
+        :param new_value: value to be added to the list
         :return:
         """
         if self.is_empty():
             raise IndexError
 
         index_node, parent_node = self.__get_index_node_and_parent(index)
-        parent_node.next = Node(new_value, index_node)
+        if parent_node is None:
+            self.__head = Node(new_value, index_node)
+        else:
+            parent_node.next = Node(new_value, index_node)
         self.__linked_list_length += 1
 
     def delete_from_head(self):
@@ -156,7 +159,10 @@ class LinkedList:
             return self.delete_from_head()
 
         index_node, parent_node = self.__get_index_node_and_parent(index)
-        parent_node.next = index_node.next
+        if parent_node is None:
+            self.__head = index_node.next
+        else:
+            parent_node.next = index_node.next
 
         self.__linked_list_length -= 1
         return index_node.data
@@ -218,24 +224,3 @@ class Stack:
 
     def __str__(self):
         return self.__stack_data.__str__()
-
-
-if __name__ == "__main__":
-    my_list = LinkedList()
-
-    def add_items_to_data_structure(data_structure):
-        items_to_add = [1, "a", 50.6, True]
-        for item in items_to_add:
-            data_structure.add(item)
-
-        print(data_structure)
-        print(type(data_structure))
-
-    queue_example = Queue()
-    stack_example = Stack()
-
-    print("Queue implementation example:")
-    add_items_to_data_structure(queue_example)
-
-    print("\nStack implementation example:")
-    add_items_to_data_structure(stack_example)
