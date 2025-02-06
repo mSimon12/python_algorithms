@@ -36,9 +36,9 @@ followed by periodical resize of the data chunks for the List and the Dictionary
 the new structures is 4 to 5 times bigger than the needed for a List, due to the implementation of a Node
 class that is used in the dynamic allocation of the data.
 
-<picture>
- <img alt="Comparison of memory usage of data structures" src="src/outputs/basic_memory_usage.png" width="600">
-</picture>
+<p align="center">
+ <img alt="Comparison of memory usage of data structures" src="src/outputs/memory_usage.png" width="600">
+</p>
 
 **Arrays** generally offer better memory efficiency for small datasets due to their contiguous storage, 
 minimal overhead, and superior cache locality, making them ideal for fast random access. However, 
