@@ -14,7 +14,8 @@ from data_structures.binary_tree import BinaryTree
 
 class MemoryAnalyzer:
 
-    def __init__(self):
+    def __init__(self, datapoints):
+        self.__datapoints = datapoints
         self.__list = []
         self.__dict = {}
         self.__linked_list = LinkedList()
@@ -22,7 +23,7 @@ class MemoryAnalyzer:
         self.__stack = Stack()
         self.__tree = BinaryTree()
 
-        self.values_for_test = random.sample(range(10000), 400)
+        self.values_for_test = random.sample(range(100000), self.__datapoints)
         self.__memory_usage = pd.DataFrame(columns=['list', 'dict', 'linked_list', 'queue', 'stack', 'tree'])
 
     def __measure_memory_sizes(self):
@@ -60,9 +61,9 @@ class MemoryAnalyzer:
         fig, axes = plt.subplots(1, 1)
         self.__memory_usage.plot(ax= axes)
 
-        axes.set_xlabel("Data added to Data Structure(n)", fontsize=14)
+        axes.set_xlabel("Amount of data (n)", fontsize=14)
         axes.set_ylabel("Memory usage (Bytes)", fontsize=14)
-        axes.set_xlim(0, 400)
+        axes.set_xlim(0, self.__datapoints)
         axes.grid(True)
         plt.locator_params(axis='y', nbins=20)
         plt.locator_params(axis='x', nbins=15)
@@ -70,115 +71,134 @@ class MemoryAnalyzer:
         fig.tight_layout()
 
 
-class PerformanceAnalyzer:
+class TimeAnalyzer:
+
+    def __init__(self, datapoints, title):
+        self.__datapoints = datapoints
+        self.__title = title
+        self.ref_curves_scale = 0.000001
+
+        self._list = []
+        self._dict = {}
+        self._linked_list = LinkedList()
+        self._tree = BinaryTree()
+
+        self.values_for_test = random.sample(range(100000), self.__datapoints)
+        self._times = pd.DataFrame(columns=['list', 'linked_list', 'dict', 'tree'])
+
+    def measure_times(self):
+        pass
+
+    @staticmethod
+    def __get_reference_curves(datapoints):
+        curves = { 'O(1)': [1]*datapoints,
+                   'O(log n)': np.log10(range(1,datapoints)),
+                   "O(n)": range(0,datapoints)
+                   }
+        return curves
+
+    def __config_axis(self, ax):
+        ax.set_xlabel("Amount of data (n)", fontsize=14)
+        ax.set_ylabel("Time (s)", fontsize=14)
+        ax.set_xlim(50, self.__datapoints)
+        ax.set_yscale('log')
+        ax.set_xscale('log')
+        ax.grid(True)
+        ax.legend(loc='upper left')
+
+    def __plot_linear_data(self, linear_data:pd.DataFrame, ax):
+        linear_data.plot(ax= ax)
+
+        linear_curve = self.__get_reference_curves(self.__datapoints)['O(n)']
+        linear_curve = [point * self.ref_curves_scale for point in linear_curve]
+        ax.plot(linear_curve, '--', label='O(n)')
+
+        self.__config_axis(ax)
+
+    def __plot_non_linear_data(self, non_linear_data: pd.DataFrame, ax):
+        non_linear_data.plot(ax= ax)
+
+        reference_curves = self.__get_reference_curves(self.__datapoints)
+        reference_curves.pop('O(n)')
+        for ref_curve_key, ref_curve in reference_curves.items():
+            ref_curve = [point * self.ref_curves_scale for point in ref_curve]
+            ax.plot(ref_curve, '--', label=ref_curve_key)
+
+        self.__config_axis(ax)
+
+    def plot_times(self):
+        plt.style.use("bmh")
+        fig, ax = plt.subplots(2, 1, figsize=(6, 8), sharex=True)
+
+        times_moving_avg = self._times.rolling(window=50).mean()
+
+        self.__plot_linear_data(times_moving_avg.loc[:, ['list', 'linked_list']], ax[0])
+        self.__plot_non_linear_data(times_moving_avg.loc[:, ['dict', 'tree']], ax[1])
+
+        fig.suptitle(self.__title, fontsize=16, fontweight='bold')
+        fig.tight_layout()
+
+
+class InsertTimeAnalyzer(TimeAnalyzer):
 
     def __init__(self, datapoints):
-        self.__list = []
-        self.__dict = {}
-        self.__linked_list = LinkedList()
-        self.__tree = BinaryTree()
+        super().__init__(datapoints, "Insertion Time")
 
-        self.__datapoints = datapoints
-        self.values_for_test = random.sample(range(100000), self.__datapoints)
-
-        self.__insert_times = pd.DataFrame(columns=['list', 'dict', 'linked_list', 'tree'])
-        self.__search_times = pd.DataFrame(columns=['list', 'dict', 'linked_list', 'tree'])
-
-    def measure_insert_time(self):
+    def measure_times(self):
         def add_to_dict(new_key):
-            self.__dict[new_key] = None
+            self._dict[new_key] = None
 
-        self.__linked_list.add_at_head(-1)
+        self._linked_list.add_at_head(-1)
 
         counter = 0
         for test_value in self.values_for_test:
             new_index = random.randint(0, counter)
-            list_insert_time = timeit.timeit(lambda: self.__list.insert(new_index, test_value), number=1)
-            linked_list_insert_time = timeit.timeit(lambda: self.__linked_list.add_at_index(new_index, test_value), number=1)
+            list_insert_time = timeit.timeit(lambda: self._list.insert(new_index, test_value), number=1)
+            linked_list_insert_time = timeit.timeit(lambda: self._linked_list.add_at_index(new_index, test_value), number=1)
 
             dict_insert_time = timeit.timeit(lambda: add_to_dict(test_value), number=1)
-            tree_insert_time = timeit.timeit(lambda: self.__tree.insert_node(test_value, None), number=1)
+            tree_insert_time = timeit.timeit(lambda: self._tree.insert_node(test_value, None), number=1)
 
-            self.__insert_times.loc[counter, :] = [list_insert_time,
-                                                   dict_insert_time,
-                                                   linked_list_insert_time,
-                                                   tree_insert_time]
+            self._times.loc[counter, :] = [list_insert_time,
+                                           linked_list_insert_time,
+                                           dict_insert_time,
+                                           tree_insert_time]
+            counter += 1
 
-            # measure search times
+
+class SearchTimeAnalyzer(TimeAnalyzer):
+
+    def __init__(self, datapoints):
+        super().__init__(datapoints, "Search Time")
+
+    def measure_times(self):
+        self._linked_list.add_at_head(-1)
+
+        counter = 0
+        for test_value in self.values_for_test:
+            new_index = random.randint(0, counter)
+            self._list.insert(new_index, test_value)
+            self._linked_list.add_at_index(new_index, test_value)
+            self._dict[test_value] = None
+            self._tree.insert_node(test_value, None)
+
             if counter == 0:
                 item_to_search_idx = 0
             else:
                 item_to_search_idx = random.sample(range(0,counter), 1)[0]
             key_to_search = self.values_for_test[item_to_search_idx]
 
-            list_search_time = timeit.timeit(lambda: key_to_search in self.__list, number=1)
-            linked_list_search_time = timeit.timeit(lambda: self.__linked_list.get_index(item_to_search_idx), number=1)
+            list_search_time = timeit.timeit(lambda: key_to_search in self._list, number=1)
+            linked_list_search_time = timeit.timeit(lambda: self._linked_list.get_index(item_to_search_idx), number=1)
+            dict_search_time = timeit.timeit(lambda: self._dict[key_to_search], number=1)
+            tree_search_time = timeit.timeit(lambda: self._tree.get_value(key_to_search), number=1)
 
-            dict_search_time = timeit.timeit(lambda: self.__dict[key_to_search], number=1)
-            tree_search_time = timeit.timeit(lambda: self.__tree.get_value(key_to_search), number=1)
-
-            self.__search_times.loc[counter, :] = [list_search_time, dict_search_time, linked_list_search_time, tree_search_time]
-
+            self._times.loc[counter, :] = [list_search_time,
+                                           linked_list_search_time,
+                                           dict_search_time,
+                                           tree_search_time]
             counter += 1
 
-
-    @staticmethod
-    def __get_reference_curves(datapoints):
-        curves = { 'constant': [1]*datapoints,
-                   'logn': np.log10(range(1,datapoints)),
-                   "linear": range(0,datapoints)
-                   }
-        return curves
-
-    def plot_insert_time(self):
-        plt.style.use("bmh")
-
-        fig, axes = plt.subplots(1, 1)
-        speeds_rolling_mean= self.__insert_times.rolling(window=50).mean()
-        speeds_rolling_mean.plot(ax= axes)
-
-        # Plot
-        scale = 0.000001
-        for ref_curve_key, ref_curve in self.__get_reference_curves(self.__datapoints).items():
-            ref_curve = [point*scale for point in ref_curve]
-            plt.plot(ref_curve, '--', label=ref_curve_key)
-
-        axes.set_xlabel("Data added to Data Structure(n)", fontsize=14)
-        axes.set_ylabel("Time (s)", fontsize=14)
-        axes.set_xlim(50, self.__datapoints)
-        axes.grid(True)
-        plt.locator_params(axis='y', nbins=20)
-        plt.locator_params(axis='x', nbins=15)
-        fig.suptitle("Insert Time", fontsize=16, fontweight='bold')
-        fig.tight_layout()
-        plt.legend()
-        plt.yscale('log')
-        plt.xscale('log')
-
-    def plot_search_time(self):
-        plt.style.use("bmh")
-
-        fig, axes = plt.subplots(1, 1)
-        speeds_rolling_mean= self.__search_times.rolling(window=50).mean()
-        speeds_rolling_mean.plot(ax= axes)
-
-        # Plot
-        scale = 0.000001
-        for ref_curve_key, ref_curve in self.__get_reference_curves(self.__datapoints).items():
-            ref_curve = [point*scale for point in ref_curve]
-            plt.plot(ref_curve, '--', label=ref_curve_key)
-
-        axes.set_xlabel("Data added to Data Structure(n)", fontsize=14)
-        axes.set_ylabel("Time (s)", fontsize=14)
-        axes.set_xlim(50, self.__datapoints)
-        axes.grid(True)
-        plt.locator_params(axis='y', nbins=20)
-        plt.locator_params(axis='x', nbins=15)
-        fig.suptitle("Search Time", fontsize=16, fontweight='bold')
-        fig.tight_layout()
-        plt.legend()
-        plt.yscale('log')
-        plt.xscale('log')
 
 class Analyzer:
     OUTPUT_DIR = "outputs"
@@ -191,25 +211,36 @@ class Analyzer:
             os.mkdir(self.OUTPUT_DIR)
 
     def evaluate_memory(self):
-        print("Memory evaluation!")
-        memory_checker = MemoryAnalyzer()
+        print("Processing memory usage ..")
+        memory_checker = MemoryAnalyzer(400)
         memory_checker.gather_memory_usage()
         memory_checker.plot_memory_usage()
 
         plt.savefig(self.OUTPUT_DIR + "/memory_usage.png")
+        print("Done!")
+
+    def evaluate_time(self, time_analyzer:TimeAnalyzer, output_file):
+        time_analyzer.measure_times()
+        time_analyzer.plot_times()
+
+        plt.savefig(self.OUTPUT_DIR + output_file)
+        # plt.show()
 
     def evaluate_insertion_time(self):
-        performance_checker = PerformanceAnalyzer(10000)
-        performance_checker.measure_insert_time()
-        performance_checker.plot_insert_time()
-        performance_checker.plot_search_time()
+        print("Processing insertion time ..")
+        insert_timer = InsertTimeAnalyzer(20000)
+        self.evaluate_time(insert_timer, "/insertion_time.png")
+        print("Done!")
 
-        # plt.savefig(self.OUTPUT_DIR + "/insert_time.png")
-        plt.show()
+    def evaluate_search_time(self):
+        print("Processing search time ..")
+        search_timer = SearchTimeAnalyzer(20000)
+        self.evaluate_time(search_timer, "/search_time.png")
+        print("Done!")
 
 
 if __name__ == "__main__":
     analyzer = Analyzer()
-    # analyzer.evaluate_memory()
-
+    analyzer.evaluate_memory()
     analyzer.evaluate_insertion_time()
+    analyzer.evaluate_search_time()
