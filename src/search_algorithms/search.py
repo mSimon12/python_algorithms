@@ -30,6 +30,16 @@ class Searcher:
 
         return None
 
+    def binary_search(self, searched_value):
+        """
+            Implements binary search, dividing the searched list size at every iteration
+            based in the searched value compared to the central value from the subset
+        :param searched_value: value to be looked in the list
+        :return: index of match or None
+        """
+        if self.__dataset is None:
+            raise ValueError("Search list was not set!")
+
 
 if __name__ == "__main__":
     data = random.sample(range(10000), 10)
