@@ -37,7 +37,7 @@ the new structures is 4 to 5 times bigger than the needed for a List, due to the
 class that is used in the dynamic allocation of the data.
 
 <p align="center">
- <img alt="Comparison of memory usage of data structures" src="src/outputs/memory_usage.png" width="600">
+ <img alt="Comparison of memory usage of data structures" src="src/outputs/memory_usage.png" width="500">
 </p>
 
 **Arrays** generally offer better memory efficiency for small datasets due to their contiguous storage, 
@@ -46,3 +46,23 @@ they suffer from resizing overhead and fragmentation issues when dynamically gro
 In contrast, **Linked Lists** provide flexible memory allocation and efficient insertions/deletions without 
 resizing, making them preferable for frequently changing data structures. Despite this advantage, 
 linked lists have higher memory overhead due to pointers and suffer from poor cache locality.
+
+### Processing Time
+In addition to the memory analysis, we have verified the processing time to **Insert**, **Search** and **Delete**
+values from 4 types of data structure (List, Linked List, Dictionary and Trees). Of course the comparison of a 
+structure developed completely in Python against a built-in python type (processed a C code) is not fair. Although,
+we can verify the complexity time for each type. The three tests (Insertion, Search and Deletion) where executed with 
+20.000 random datapoints, to be processed in random indexes of the structures, avoiding getting only best time from the executions. 
+- With the tests it was confirmed the **linear complexity O(n)** from the **List** and **Linked List**(as in the table above), 
+due to the constant need of data shift for the List and the dependency on a search for the Linked List.
+ - When we verify the processing time for the **Dictionary** and for the **Binary Tree**, we can see a better performance.
+The Binary Tree presents the expected behavior of a **O(log n)**, verified by comparing it to the reference curve. 
+And the Dictionary, since it is implemented in python as a hash table, has shown a constant behavior, with some
+noticeable variations after 3.000 datapoints, which might be justified due to table resizing, memory overhead or 
+hash collisions (rare cases).
+
+<p align="center">
+ <img alt="Insertion time comparison" src="src/outputs/insertion_time.png" width="250">
+ <img alt="Search time comparison" src="src/outputs/search_time.png" width="250">
+ <img alt="Delete time comparison" src="src/outputs/delete_time.png" width="250">
+</p>

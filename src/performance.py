@@ -76,7 +76,7 @@ class TimeAnalyzer:
     def __init__(self, datapoints, title):
         self.__datapoints = datapoints
         self.__title = title
-        self.ref_curves_scale = 0.000001
+        self._ref_curves_scale = 0.000001
 
         self._list = []
         self._dict = {}
@@ -110,7 +110,7 @@ class TimeAnalyzer:
         linear_data.plot(ax= ax)
 
         linear_curve = self.__get_reference_curves(self.__datapoints)['O(n)']
-        linear_curve = [point * self.ref_curves_scale for point in linear_curve]
+        linear_curve = [point * self._ref_curves_scale for point in linear_curve]
         ax.plot(linear_curve, '--', label='O(n)')
 
         self.__config_axis(ax)
@@ -121,19 +121,19 @@ class TimeAnalyzer:
         reference_curves = self.__get_reference_curves(self.__datapoints)
         reference_curves.pop('O(n)')
         for ref_curve_key, ref_curve in reference_curves.items():
-            ref_curve = [point * self.ref_curves_scale for point in ref_curve]
+            ref_curve = [point * self._ref_curves_scale for point in ref_curve]
             ax.plot(ref_curve, '--', label=ref_curve_key)
 
         self.__config_axis(ax)
 
     def plot_times(self):
         plt.style.use("bmh")
-        fig, ax = plt.subplots(2, 1, figsize=(6, 8), sharex=True)
+        fig, self._axes = plt.subplots(2, 1, figsize=(6, 8), sharex=True)
 
         times_moving_avg = self._times.rolling(window=50).mean()
 
-        self.__plot_linear_data(times_moving_avg.loc[:, ['list', 'linked_list']], ax[0])
-        self.__plot_non_linear_data(times_moving_avg.loc[:, ['dict', 'tree']], ax[1])
+        self.__plot_linear_data(times_moving_avg.loc[:, ['list', 'linked_list']], self._axes[0])
+        self.__plot_non_linear_data(times_moving_avg.loc[:, ['dict', 'tree']], self._axes[1])
 
         fig.suptitle(self.__title, fontsize=16, fontweight='bold')
         fig.tight_layout()
@@ -200,6 +200,42 @@ class SearchTimeAnalyzer(TimeAnalyzer):
             counter += 1
 
 
+class DeleteTimeAnalyzer(TimeAnalyzer):
+
+    def __init__(self, datapoints):
+        super().__init__(datapoints, "Delete Time")
+
+    def measure_times(self):
+        self._linked_list.add_at_head(-1)
+
+        counter = 0
+        for test_value in self.values_for_test:
+            new_index = random.randint(0, counter)
+            self._list.insert(new_index, test_value)
+            self._linked_list.add_at_index(new_index, test_value)
+            self._dict[test_value] = None
+            self._tree.insert_node(test_value, None)
+
+            counter += 1
+
+        run_idx = len(self.values_for_test)
+        while len(self.values_for_test) > 0:
+            item_to_delete_idx = random.sample(range(0, len(self.values_for_test)), 1)[0]
+            key_to_delete = self.values_for_test[item_to_delete_idx]
+            self.values_for_test.remove(key_to_delete)
+
+            list_delete_time = timeit.timeit(lambda: self._list.remove(key_to_delete), number=1)
+            linked_list_delete_time = timeit.timeit(lambda: self._linked_list.delete_from_index(item_to_delete_idx), number=1)
+            dict_delete_time = timeit.timeit(lambda: self._dict.pop(key_to_delete), number=1)
+            tree_delete_time = timeit.timeit(lambda: self._tree.delete_node(key_to_delete), number=1)
+
+            self._times.loc[run_idx, :] = [list_delete_time,
+                                           linked_list_delete_time,
+                                           dict_delete_time,
+                                           tree_delete_time]
+            run_idx -= 1
+
+
 class Analyzer:
     OUTPUT_DIR = "outputs"
 
@@ -224,7 +260,7 @@ class Analyzer:
         time_analyzer.plot_times()
 
         plt.savefig(self.OUTPUT_DIR + output_file)
-        # plt.show()
+        plt.show()
 
     def evaluate_insertion_time(self):
         print("Processing insertion time ..")
@@ -238,9 +274,16 @@ class Analyzer:
         self.evaluate_time(search_timer, "/search_time.png")
         print("Done!")
 
+    def evaluate_delete_time(self):
+        print("Processing delete time ..")
+        search_timer = DeleteTimeAnalyzer(20000)
+        self.evaluate_time(search_timer, "/delete_time.png")
+        print("Done!")
+
 
 if __name__ == "__main__":
     analyzer = Analyzer()
-    analyzer.evaluate_memory()
-    analyzer.evaluate_insertion_time()
-    analyzer.evaluate_search_time()
+    # analyzer.evaluate_memory()
+    # analyzer.evaluate_insertion_time()
+    # analyzer.evaluate_search_time()
+    analyzer.evaluate_delete_time()
