@@ -1,5 +1,6 @@
 import pytest
-from src.data_structures import LinkedList, Queue, Stack
+from src.data_structures.basic_data_structures import LinkedList, Queue, Stack
+
 
 class TestLinkedList:
 
@@ -25,7 +26,7 @@ class TestLinkedList:
         linked_list.add_at_head(self.TEST_FLOAT)
         assert self.TEST_FLOAT == linked_list.get_index(0), "Fail to add item of type 'float' to head!"
 
-    def test_add_data_to_index(self, linked_list):
+    def test_add_data_to_tail(self, linked_list):
         linked_list.add_at_tail(self.TEST_INT)
         assert self.TEST_INT == linked_list.get_index(0) , "Fail to add item of type 'int' to tail!"
 
@@ -38,20 +39,20 @@ class TestLinkedList:
         linked_list.add_at_tail(self.TEST_FLOAT)
         assert self.TEST_FLOAT == linked_list.get_index(3), "Fail to add item of type 'float' to tail!"
 
-    def test_add_data_to_tail(self, linked_list):
+    def test_add_data_to_index(self, linked_list):
         linked_list.add_at_head("place_holder")
         linked_list.add_at_head("place_holder")
 
-        linked_list.add_at_index(self.TEST_INT,1)
+        linked_list.add_at_index(1, self.TEST_INT)
         assert self.TEST_INT == linked_list.get_index(1) , "Fail to add item of type 'int' to defined index!"
 
-        linked_list.add_at_index(self.TEST_BOOL, 2)
+        linked_list.add_at_index(2, self.TEST_BOOL)
         assert self.TEST_BOOL == linked_list.get_index(2), "Fail to add item of type 'boolean' to defined index!"
 
-        linked_list.add_at_index(self.TEST_STRING,1)
+        linked_list.add_at_index(1, self.TEST_STRING)
         assert self.TEST_STRING == linked_list.get_index(1), "Fail to add item of type 'string' to defined index!"
 
-        linked_list.add_at_index(self.TEST_FLOAT,3)
+        linked_list.add_at_index(3, self.TEST_FLOAT)
         assert self.TEST_FLOAT == linked_list.get_index(3), "Fail to add item of type 'float' to defined index!"
 
     def test_add_raise_exception(self, linked_list):
