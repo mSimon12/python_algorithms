@@ -1,55 +1,69 @@
 import random
+import abc
 
-from numpy.ma.core import floor
 
+class SearcherInterface(metaclass=abc.ABCMeta):
+    @classmethod
+    def __subclasshook__(cls, subclass):
+        return (hasattr(subclass, 'search') and
+                callable(subclass.search) or
+                NotImplemented)
 
-class Searcher:
-
-    def __init__(self, dataset= None):
-        self.__dataset = dataset
-
-    @property
-    def dataset(self):
-        return self.__dataset
-
-    @dataset.setter
-    def dataset(self, search_list):
-        self.__dataset = search_list
-
-    def linear_search(self, searched_value):
+    @abc.abstractmethod
+    def search(self, dataset:list, searched_value):
         """
-            Implements linear search, iterating over each element until find match
+            Search for element presence in a list
+        :param dataset: List with items where the search must be executed
         :param searched_value: value to be looked in the list
         :return: index of match or None
         """
-        if self.__dataset is None:
-            raise ValueError("Search list was not set!")
+        raise NotImplementedError
+
+
+class LinearSearch(SearcherInterface):
+
+    def search(self, dataset:list, searched_value):
+        """
+            Implements linear search, iterating over each element until find match
+        :param dataset: List with items where the search must be executed
+        :param searched_value: value to be looked in the list
+        :return: index of match or None
+        """
+        if not dataset:
+            raise ValueError("Invalid search dataset!")
 
         count = 0
-        for next_value in self.__dataset:
+        for next_value in dataset:
             if searched_value == next_value:
                 return count
             count += 1
 
         return None
 
-    def binary_search(self, searched_value):
+
+class BinarySearch(SearcherInterface):
+
+    def __init__(self):
+        self.dataset = None
+
+    def search(self, dataset:list, searched_value):
         """
             Implements binary search, dividing the searched list size at every iteration
             based in the searched value compared to the central value from the subset
+        :param dataset: List with items where the search must be executed
         :param searched_value: value to be looked in the list
         :return: index of match or None
         """
-        if self.__dataset is None:
-            raise ValueError("Search list was not set!")
+        if not dataset:
+            raise ValueError("Invalid search dataset!")
 
+        self.dataset = dataset
         return self.__recursive_search(searched_value, 0, len(self.dataset) - 1)
-
 
     def __recursive_search(self, searched_value, left_idx, right_idx):
         """
             Recursively split a list in the middle, according to the searched value
-        :param searched_value: value of interest
+        :param searched_value:
         :param left_idx: left index for the sub-dataset
         :param right_idx: right index for the sub-dataset
         :return: index of match or None
@@ -70,11 +84,7 @@ class Searcher:
 def main():
     data = random.sample(range(10000), 100)
 
-    my_searcher = Searcher()
-    my_searcher.dataset = data
-
     interest_value = int(input("Inform value to search: "))
-
     search_algorithm = input("Choose a search algorithm:"
                              "\n\t-Linear Search: 1"
                              "\n\t-Binary Search: 2"
@@ -82,12 +92,14 @@ def main():
     search_algorithm = int(search_algorithm)
 
     if search_algorithm == 1:
-        value_idx = my_searcher.linear_search(interest_value)
+        my_searcher = LinearSearch()
     elif search_algorithm == 2:
-        value_idx = my_searcher.binary_search(interest_value)
+        my_searcher = BinarySearch()
     else:
         print("Invalid Search Option")
         return
+
+    value_idx = my_searcher.search(data, interest_value)
 
     if value_idx is not None:
         print(f"The value '{interest_value} is at index {value_idx}")
