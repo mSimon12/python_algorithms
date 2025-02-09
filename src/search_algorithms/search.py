@@ -4,9 +4,9 @@ import abc
 
 class SearcherInterface(metaclass=abc.ABCMeta):
     @classmethod
-    def __subclasshook__(cls, subclass):
-        return (hasattr(subclass, 'search') and
-                callable(subclass.search) or
+    def __subclasshook__(cls, __subclass):
+        return (hasattr(__subclass, 'search') and
+                callable(__subclass.search) or
                 NotImplemented)
 
     @abc.abstractmethod
