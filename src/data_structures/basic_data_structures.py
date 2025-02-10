@@ -189,6 +189,9 @@ class Queue:
     def __init__(self):
         self.__queue_data = LinkedList()
 
+    def is_empty(self):
+        return self.__queue_data.is_empty()
+
     def add(self, new_queue_value):
         self.__queue_data.add_at_tail(new_queue_value)
 
@@ -209,6 +212,9 @@ class Stack:
 
     def __init__(self):
         self.__stack_data = LinkedList()
+
+    def is_empty(self):
+        return self.__stack_data.is_empty()
 
     def add(self, new_queue_value):
         self.__stack_data.add_at_head(new_queue_value)
