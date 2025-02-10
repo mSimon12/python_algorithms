@@ -94,3 +94,5 @@ print("\nDescending order:")
 print(f"\tKeys: {my_binary_tree.get_sorted_tree_keys(reverse=True)}")
 print(f"\tValues: {my_binary_tree.get_sorted_tree_values(reverse=True)}")
 ```
+
+## Graphs
