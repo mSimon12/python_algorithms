@@ -1,6 +1,9 @@
 # Item Search
 
 ## Linear Search
+This is the simplest search option, where we verify the items of the list 
+one by one until we get to the searched value. The time complexity is **O(n)**, 
+since it requires visiting all nodes if the search item is the last one.
 
 ```python
 from src.search_algorithms.search import LinearSearch
@@ -19,6 +22,12 @@ else:
 ```
 
 ## Binary Search
+Binary search follows the **divide and conquer** principle, which reduces the 
+processing time from O(n)n to **O(log n)**. It splits the searched list size by 
+half at every iteration, according to a comparison from the looked value to the
+middle value from the subset. It does require sorted list to be possible, but in
+diverse applications it might be interesting to expend time sorting the data once
+to be able to reduce time from multiple search procedures.
 
 ```python
 from src.search_algorithms.search import BinarySearch
