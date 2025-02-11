@@ -183,11 +183,23 @@ class Dijkstra:
 
     @staticmethod
     def __relax(source_node, target_node, weight):
+        """
+            Executed node relaxation - verifies if distance can be reduced via another path
+        :param source_node: possible new path to the target
+        :param target_node: node having the distance checked
+        :param weight: weight to move from source_node to target_node
+        :return: None
+        """
         if target_node.distance > source_node.distance + weight:
             target_node.distance = source_node.distance + weight
             target_node.predecessor = source_node
 
     def run(self, path_source):
+        """
+            Executes the Dijkstra algorithm to get the shortest paths starting from path_source
+        :param path_source: start point for doing the search for other vertices from graph
+        :return: Dictionary with nodes from the graph
+        """
         self.__initialize_nodes()
 
         if path_source not in self.__nodes.keys():
@@ -215,32 +227,3 @@ class Dijkstra:
                 neighbor_idx += 1
 
         return self.__nodes
-
-
-def main():
-    paths_graph = AdjMatrixGraph()
-
-    vertices = ["A", "B", "C", "D", "E"]
-    for vertex in vertices:
-        paths_graph.add_vertice(vertex)
-
-    # Tasks dependencies
-    paths_graph.add_edge("A", "B", 5)
-    paths_graph.add_edge("A", "C", 10)
-    paths_graph.add_edge("B", "C", 3)
-    paths_graph.add_edge("B", "D", 9)
-    paths_graph.add_edge("B", "E", 2)
-    paths_graph.add_edge("C", "B",2)
-    paths_graph.add_edge("C", "D", 1)
-    paths_graph.add_edge("D", "E", 4)
-    paths_graph.add_edge("E", "A",7)
-    paths_graph.add_edge("E", "D", 6)
-
-    djk = Dijkstra(paths_graph)
-    djk_result = djk.run("A")
-
-    for vertex in djk_result:
-        print(f"Distance from 'A' to '{vertex}': {djk_result[vertex].distance}")
-
-if __name__ == "__main__":
-    main()

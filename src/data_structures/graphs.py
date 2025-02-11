@@ -200,21 +200,3 @@ class AdjMatrixGraph(GraphInterface):
             idx += 1
 
         return key_to_idx
-
-
-def main():
-    my_graph = AdjListGraph()
-    # my_graph = AdjMatrixGraph()
-
-    my_graph.add_vertice("a")
-    my_graph.add_vertice("b")
-    my_graph.add_vertice("c")
-    my_graph.add_edge("a", "b")
-    my_graph.add_edge("a", "c")
-    my_graph.add_edge("b", "c")
-    my_graph.add_edge("c", "b")
-
-    print(my_graph)
-
-if __name__ == "__main__":
-    main()
