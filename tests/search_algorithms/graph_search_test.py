@@ -1,6 +1,6 @@
 import pytest
 from src.data_structures.graphs import AdjListGraph
-from src.search_algorithms.graphs_search import BFS
+from src.search_algorithms.graphs_search import BFS, DFS
 
 class TestBFS:
     # Sample graph (directed graph)
@@ -38,6 +38,10 @@ class TestBFS:
     def bfs_under_test(self, sample_graph):
         return BFS(sample_graph)
 
+    @pytest.fixture()
+    def dfs_under_test(self, sample_graph):
+        return DFS(sample_graph)
+
     def test_bfs_invalid_source_exception(self, bfs_under_test):
         with pytest.raises(KeyError, match='Source node not in Graph!'):
             bfs_under_test.run("F")
@@ -67,3 +71,14 @@ class TestBFS:
         distance, path = bfs_under_test.get_shortest_path("A", "E")
         assert 3 == distance, "Fail to process shortest path!"
         assert ["A", "C", "D", "E"] == path, "Fail to process shortest path!"
+
+    def test_dfs_invalid_source_exception(self, dfs_under_test):
+        with pytest.raises(KeyError, match='Source node not in Graph!'):
+            dfs_under_test.run("F")
+
+    def test_dfs_from_valid_nodes(self, dfs_under_test):
+        dfs_under_test.run("A")
+        dfs_under_test.run("B")
+        dfs_under_test.run("C")
+        dfs_under_test.run("D")
+        dfs_under_test.run("E")
