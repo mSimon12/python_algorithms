@@ -158,9 +158,10 @@ class AdjMatrixGraph(GraphInterface):
         self._graph.pop(vertice_idx)
         self._key_map.remove(deleted_vertice_key)
 
-    def add_edge(self, source_key, dest_key):
+    def add_edge(self, source_key, dest_key, weight=1):
         """
             Include a new edge between source and destination nodes
+        :param weight: the cost/weight from this edge
         :param source_key: key associated with the source node
         :param dest_key: key associated with the destination node
         :return: None
@@ -173,7 +174,7 @@ class AdjMatrixGraph(GraphInterface):
         source_idx = self._key_map.index(source_key)
         dest_idx = self._key_map.index(dest_key)
 
-        self._graph[source_idx][dest_idx] = 1
+        self._graph[source_idx][dest_idx] = weight
 
     def delete_edge(self, source_key, dest_key):
         """
