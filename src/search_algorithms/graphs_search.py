@@ -1,6 +1,6 @@
 import math
 
-from src.data_structures.graphs import AdjListGraph
+from src.data_structures.graphs import AdjListGraph, AdjMatrixGraph
 from src.data_structures.basic_data_structures import Queue
 
 
@@ -85,7 +85,7 @@ class BFS:
 
 class DFS:
     """
-        Depth-First Search class to provide graph the shortest paths
+        Depth-First Search class to provide graph topological sort
     """
     def __init__(self, graph:AdjListGraph):
         self.__graph = graph.get_graph()
@@ -162,33 +162,85 @@ class DFS:
 
         return execution_order
 
+class Dijkstra:
+    """
+        Implementation of Dijkstra algorithm
+    """
+    def __init__(self, graph:AdjMatrixGraph):
+        self.__graph = graph.get_graph()
+        self.__nodes = {}
+        self.__graph_key_map = graph.get_key_idx_map()
+
+    def __initialize_nodes(self):
+        """
+            Initialize the nodes for each vertex from the graph
+        :return: None
+        """
+        graph_vertices = self.__graph_key_map.keys()
+
+        for vertex in graph_vertices:
+            self.__nodes[vertex] = SearchNode(vertex)
+
+    @staticmethod
+    def __relax(source_node, target_node, weight):
+        if target_node.distance > source_node.distance + weight:
+            target_node.distance = source_node.distance + weight
+            target_node.predecessor = source_node
+
+    def run(self, path_source):
+        self.__initialize_nodes()
+
+        if path_source not in self.__nodes.keys():
+            raise KeyError("Source node not in Graph!")
+
+        source_node = self.__nodes[path_source]
+        source_node.distance = 0
+
+        processed_nodes = []
+        nodes_to_be_processed = list(self.__nodes.values())
+
+        while nodes_to_be_processed:
+            nodes_to_be_processed.sort(key=lambda node: node.distance, reverse=True)
+            current_vertex = nodes_to_be_processed.pop()
+
+            current_vertex_idx = self.__graph_key_map[current_vertex.key]
+            processed_nodes.append(current_vertex)
+
+            neighbor_idx = 0
+            for weight in self.__graph[current_vertex_idx]:
+                if weight > 0:
+                    neighbor_key = list(self.__graph_key_map.keys())[neighbor_idx]
+                    neighbor_node = self.__nodes[neighbor_key]
+                    self.__relax(current_vertex, neighbor_node, weight)
+                neighbor_idx += 1
+
+        return self.__nodes
+
 
 def main():
-    task_graph = AdjListGraph()
+    paths_graph = AdjMatrixGraph()
 
-    tasks = ["A", "B", "C", "D", "E", "F"]
-    for t in tasks:
-        task_graph.add_vertice(t)
+    vertices = ["A", "B", "C", "D", "E"]
+    for vertex in vertices:
+        paths_graph.add_vertice(vertex)
 
     # Tasks dependencies
-    task_graph.add_edge("A", "B")
-    task_graph.add_edge("A", "C")
-    task_graph.add_edge("B", "D")
-    task_graph.add_edge("C", "E")
-    task_graph.add_edge("E", "F")
+    paths_graph.add_edge("A", "B", 5)
+    paths_graph.add_edge("A", "C", 10)
+    paths_graph.add_edge("B", "C", 3)
+    paths_graph.add_edge("B", "D", 9)
+    paths_graph.add_edge("B", "E", 2)
+    paths_graph.add_edge("C", "B",2)
+    paths_graph.add_edge("C", "D", 1)
+    paths_graph.add_edge("D", "E", 4)
+    paths_graph.add_edge("E", "A",7)
+    paths_graph.add_edge("E", "D", 6)
 
-    dfs = DFS(task_graph)
-    dfs.run("F")
+    djk = Dijkstra(paths_graph)
+    djk_result = djk.run("A")
 
-    # Print task dependencies
-    print("Task Dependencies:")
-    for vertex in tasks:
-        dependent_tasks = task_graph.get_graph()[vertex]
-        if dependent_tasks:
-            print(f"{vertex} -> {dependent_tasks}")
-
-    execution_order = dfs.get_topological_sort()
-    print("Task Execution Order:", execution_order)
+    for vertex in djk_result:
+        print(f"Distance from 'A' to '{vertex}': {djk_result[vertex].distance}")
 
 if __name__ == "__main__":
     main()
