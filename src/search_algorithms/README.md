@@ -50,18 +50,12 @@ modified to fit the problem in question. Some example applications are:
 Breadth-ﬁrst search is so named because it expands the frontier between discovered 
 and undiscovered vertices uniformly across the breadth of the frontier. That is, 
 the algorithm discovers all vertices at distance k from s before discovering any 
-vertices at distance k+1.
-
-## DFS - Depth-First Search
-Depth-ﬁrst search explores edges out of the most recently discovered vertex v that 
-still has unexplored edges leaving it. Once all of v’s edges have been explored, 
-the search “backtracks” to explore edges leaving the vertex from which v was 
-discovered.
-
+vertices at distance k+1. The example below provides the shortest path from node A
+to each of the nodes from the graph.
 
 ```python
 from src.data_structures.graphs import AdjListGraph
-from src.search_algorithms.graphs_search import BFS, DFS
+from src.search_algorithms.graphs_search import BFS
 
 my_graph = AdjListGraph()
 
@@ -71,7 +65,6 @@ my_graph.add_vertice("B")
 my_graph.add_vertice("C")
 my_graph.add_vertice("D")
 my_graph.add_vertice("E")
-my_graph.add_vertice("F")
 
 # Add edges
 my_graph.add_edge("A", "B")
@@ -79,22 +72,50 @@ my_graph.add_edge("A", "D")
 my_graph.add_edge("B", "C")
 my_graph.add_edge("C", "E")
 my_graph.add_edge("D", "C")
-my_graph.add_edge("E", "A")
-my_graph.add_edge("F", "A")
-my_graph.add_edge("F", "E")
 
 bfs = BFS(my_graph)
-bfs_result = bfs.run("F")
+bfs_result = bfs.run("A")
 
 for vertex in bfs_result:
-    print(f"Distance from 'F' to '{vertex}': {bfs.get_shortest_path('F', vertex)}")
+    print(f"Distance from 'A' to '{vertex}': {bfs.get_shortest_path('A', vertex)}")
+```
 
-dfs = DFS(my_graph)
-dfs_result = dfs.run("F")
+## DFS - Depth-First Search
+Depth-ﬁrst search explores edges out of the most recently discovered vertex v that 
+still has unexplored edges leaving it. Once all of v’s edges have been explored, 
+the search “backtracks” to explore edges leaving the vertex from which v was 
+discovered. The example below makes use of the DFS to find a valid task sequence
+that keeps the tasks dependencies.
 
-for vertex in dfs_result:
-    print(f"Start from '{vertex}': {dfs_result[vertex].distance}")
-    print(f"End from '{vertex}': {dfs_result[vertex].finish}")
+```python
+from src.data_structures.graphs import AdjListGraph
+from src.search_algorithms.graphs_search import DFS
+
+task_graph = AdjListGraph()
+
+tasks = ["A", "B", "C", "D", "E", "F"]
+for t in tasks:
+    task_graph.add_vertice(t)
+
+# Tasks dependencies
+task_graph.add_edge("A", "B")
+task_graph.add_edge("A", "C")
+task_graph.add_edge("B", "D")
+task_graph.add_edge("C", "E")
+task_graph.add_edge("E", "F")
+
+dfs = DFS(task_graph)
+dfs.run("F")
+
+# Print task dependencies
+print("Task Dependencies:")
+for vertex in tasks:
+    dependent_tasks = task_graph.get_graph()[vertex]
+    if dependent_tasks:
+        print(f"{vertex} -> {dependent_tasks}")
+
+execution_order = dfs.get_topological_sort()
+print("Task Execution Order:", execution_order)
 ```
 
 

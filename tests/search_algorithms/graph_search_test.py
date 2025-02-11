@@ -82,3 +82,7 @@ class TestBFS:
         dfs_under_test.run("C")
         dfs_under_test.run("D")
         dfs_under_test.run("E")
+
+    def test_bfs_get_topological_sort_without_run(self, dfs_under_test):
+        with pytest.raises(ChildProcessError, match="Must run DFS before requesting topological sort!"):
+            dfs_under_test.get_topological_sort()

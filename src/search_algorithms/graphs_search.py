@@ -147,40 +147,48 @@ class DFS:
 
         return self.__dfs_nodes
 
+    def get_topological_sort(self):
+        """
+            Perform Topological Sorting using DFS
+        :return: None
+        """
+
+        if not self.__dfs_nodes:
+            raise ChildProcessError("Must run DFS before requesting topological sort!")
+
+        # Sort nodes in descending order of finish time
+        sorted_tasks = sorted(self.__dfs_nodes.values(), key=lambda node: node.finish, reverse=True)
+        execution_order = [node.key for node in sorted_tasks]
+
+        return execution_order
+
 
 def main():
-    my_graph = AdjListGraph()
+    task_graph = AdjListGraph()
 
-    # Add vertices
-    my_graph.add_vertice("A")
-    my_graph.add_vertice("B")
-    my_graph.add_vertice("C")
-    my_graph.add_vertice("D")
-    my_graph.add_vertice("E")
-    my_graph.add_vertice("F")
+    tasks = ["A", "B", "C", "D", "E", "F"]
+    for t in tasks:
+        task_graph.add_vertice(t)
 
-    # Add edges
-    my_graph.add_edge("A", "B")
-    my_graph.add_edge("A", "D")
-    my_graph.add_edge("B", "C")
-    my_graph.add_edge("C", "E")
-    my_graph.add_edge("D", "C")
-    my_graph.add_edge("E", "A")
-    my_graph.add_edge("F", "A")
-    my_graph.add_edge("F", "E")
+    # Tasks dependencies
+    task_graph.add_edge("A", "B")
+    task_graph.add_edge("A", "C")
+    task_graph.add_edge("B", "D")
+    task_graph.add_edge("C", "E")
+    task_graph.add_edge("E", "F")
 
-    bfs = BFS(my_graph)
-    bfs_result = bfs.run("F")
+    dfs = DFS(task_graph)
+    dfs.run("F")
 
-    for vertex in bfs_result:
-        print(f"Distance from 'F' to '{vertex}': {bfs.get_shortest_path('F', vertex)}")
+    # Print task dependencies
+    print("Task Dependencies:")
+    for vertex in tasks:
+        dependent_tasks = task_graph.get_graph()[vertex]
+        if dependent_tasks:
+            print(f"{vertex} -> {dependent_tasks}")
 
-    dfs = DFS(my_graph)
-    dfs_result = dfs.run("F")
-
-    for vertex in dfs_result:
-        print(f"Start from '{vertex}': {dfs_result[vertex].distance}")
-        print(f"End from '{vertex}': {dfs_result[vertex].finish}")
+    execution_order = dfs.get_topological_sort()
+    print("Task Execution Order:", execution_order)
 
 if __name__ == "__main__":
     main()
