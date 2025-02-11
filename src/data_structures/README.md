@@ -94,3 +94,83 @@ print("\nDescending order:")
 print(f"\tKeys: {my_binary_tree.get_sorted_tree_keys(reverse=True)}")
 print(f"\tValues: {my_binary_tree.get_sorted_tree_values(reverse=True)}")
 ```
+
+## Graphs
+
+A **graph** is a fundamental data structure in computer science and mathematics 
+that models relationships between objects. It consists of **nodes (vertices)** 
+connected by **edges**, which can be either **directed** (one-way) or **undirected**
+(two-way). Graphs are used to represent a wide range of real-world structures, 
+such as **social networks, road maps, computer networks, and dependency 
+relationships**. Depending on their properties, graphs can be **weighted or 
+unweighted, cyclic or acyclic, sparse or dense**. Due to their versatility, 
+graphs are widely applied in **pathfinding, recommendation systems, 
+AI, and network analysis**, making them an essential concept in both theoretical 
+and practical computing.  
+
+Graphs can be represented in two main ways: **Adjacency Lists** and 
+**Adjacency Matrices**.  
+
+### **Adjacency List**  
+An adjacency list represents a graph as a **collection of lists**, where each node
+has a list of its directly connected neighbors. This representation is 
+**memory-efficient**, especially for sparse graphs, as it only stores existing edges. 
+It is widely used in applications requiring efficient traversal, such as 
+**BFS and DFS**, since it allows quick access to a node's neighbors.  
+
+**Example of an adjacency list:**  
+A → B, C \
+B → D \
+C → E \
+D → \
+E → \
+
+
+This means **A** connects to **B and C**, **B** connects to **D**, and so on.  
+
+### **Adjacency Matrix**  
+An adjacency matrix is a **2D array (matrix)** where rows and columns represent 
+nodes, and each cell contains **1 (if an edge exists) or 0 (if it does not)**. 
+For weighted graphs, the matrix stores the weight instead of just 1s and 0s. 
+While an adjacency matrix provides **constant-time edge lookups**, it is 
+**memory-intensive for large, sparse graphs**, as it allocates space for all 
+possible edges, even if many are missing.  
+
+**Example of an adjacency matrix:**  
+
+|   | A | B | C | D | E |
+|---|---|---|---|---|---| 
+| A | 0 | 1 | 1 | 0 | 0 | 
+| B | 0 | 0 | 0 | 1 | 0 | 
+| C | 0 | 0 | 0 | 0 | 1 | 
+| D | 0 | 0 | 0 | 0 | 0 | 
+| E | 0 | 0 | 0 | 0 | 0 |   
+
+
+### **Choosing Between Adjacency List and Adjacency Matrix**  
+- Use an **Adjacency List** for **sparse graphs** where memory efficiency is important.  
+- Use an **Adjacency Matrix** for **dense graphs** or when **fast edge lookups** are needed.  
+
+By selecting the right representation, graph algorithms can be optimized for 
+performance and memory usage in real-world applications. At ``graphs.py`` we 
+provide two classes that simplifies the construction of such structures by 
+providing insert/delete commands for vertices and edges. The example usage is 
+presented below.
+
+
+```python
+from src.data_structures.graphs import AdjListGraph, AdjMatrixGraph
+
+my_graph = AdjListGraph()
+# my_graph = AdjMatrixGraph()
+
+my_graph.add_vertice("a")
+my_graph.add_vertice("b")
+my_graph.add_vertice("c")
+my_graph.add_edge("a", "b")
+my_graph.add_edge("a", "c")
+my_graph.add_edge("b", "c")
+my_graph.add_edge("c", "b")
+
+print(my_graph)
+```

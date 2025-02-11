@@ -66,3 +66,5 @@ hash collisions (rare cases).
  <img alt="Search time comparison" src="src/outputs/search_time.png" width="250">
  <img alt="Delete time comparison" src="src/outputs/delete_time.png" width="250">
 </p>
+
+## Algorithms
