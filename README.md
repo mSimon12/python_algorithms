@@ -1,16 +1,37 @@
 # Python Algorithms
 
-Performance processing an application is always welcome.
-Therefore, here I include a set of data structures and algorithms implemented to 
-execute their task in the most efficient way.
+_An **Algorithm** is any well-defined computational procedure that takes some set of values 
+as input, and produces a set of values as output_. It is a sequence of computational 
+steps that when executed will transform an input into the desired output.
 
-## Data Structures
+Some problems might arise frequently in practice, and knowing well known techniques
+for solving these problems is very useful to improve the efficiency and performance
+of the designed solutions. An example of a problem that we can face frequently is the
+need for **sorting** an amount of data. This might look as a simple problem to be solved,
+but providing an efficient way to do so is not very trivial. Therefore, in this repository
+I implement some of the most known sorting algorithms and evaluate their performance.
+Such implementations and evaluations can be found at [Sorting Algorithms](src/sorting_algorithms).
+
+Another very frequent situation that might arise is the need for searching items, paths,
+minimum or maximum values, etc. For this we also have some renown algorithms, and I have 
+chosen to present just a sample of some of the most known. At [Search Algorithms](src/search_algorithms)
+I provide classes for finding items with **Linear Search** and **Binary Search** algorithms.
+Furthermore, I provide implementations of **Breadth-First Search**, **Depth-First Search** and **Dijkstra**
+algorithms, which are very useful when dealing with complex situations involving the interaction
+of multiple elements between each other.
+
+To make the implementation of such algorithms possible in an efficient manner, a set of
+Data Structures have been proposed, each with it own characteristics and benefits. Therefore,
+I also provide at [Data Structures](src/data_structures) the implementation of these structures,
+which the memory performance and processing time is presented below.
+
+## Data Structures Performance
 Data structures are fundamental components of computer science that help in organizing,
 storing, and managing data efficiently. 
 They enable optimal data manipulation, retrieval, and storage, improving the performance of algorithms. 
 Common data structures include arrays, linked lists, stacks, queues, trees, 
 and graphs, each suited for specific tasks. 
-I can consider the following table to do the best choice when deciding which one to use.
+We can consider the following table to do the best choice when deciding which one to use.
 
 | **Data Structure**    | **Access Time** | **Search Time** | **Insertion/Deletion** | **Memory Usage** | **Best Use Cases** |
 |-----------------------|----------------|-----------------|------------------------|------------------|---------------------|
@@ -67,4 +88,4 @@ hash collisions (rare cases).
  <img alt="Delete time comparison" src="src/outputs/delete_time.png" width="250">
 </p>
 
-## Algorithms
+## Sorting Algorithms Performance
