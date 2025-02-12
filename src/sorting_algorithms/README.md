@@ -22,8 +22,7 @@ smaller value. At each comparison that the value in the left is still bigger, it
 the compared value to the right. When the smaller value is found, it finally places the current
 value at the last free position.
 
-```prettier
-Example: 
+    Example:
     Initial array: [4, 3, 2, 1]
 
     Step 1: Insert 3 
@@ -42,6 +41,43 @@ Example:
     [1, 2, 3, 4]  → Insert 1 at position 0 \
     
     Sorted array: [1, 2, 3, 4]
-```
 
+## Merge Sort
+The Merge Sort algorithm follows the dived-and-conquer principle, where it breaks
+the problem into several sub-problems that are similar to the original problem but
+smaller in size, solve the sub-problems recursively, and then combine these 
+solutions to create a solution to the original problem. 
 
+The divide-and-conquer paradigm involves three steps at each level of the recursion:
+1. Divide the problem into a number of sub-problems that are smaller instances of the 
+same problem.
+2. Conquer the sub-problems by solving them recursively. If the sub-problem sizes 
+are small enough, however, just solve the sub-problems in a straightforward manner.
+3. Combine the solutions to the sub-problems into the solution for the original 
+problem.
+
+Merge Sort follows this principle by doing the following steps:
+1. **Divide**: Divide the n-element sequence to be sorted into two sub-sequences 
+of n/2 elements each.
+2. **Conquer**: Sort the two subsequences recursively using merge sort.
+3. **Combine**: Merge the two sorted subsequences to produce the sorted answer (compare
+the smallest value from the 2 sub-sequences and get the smallest).
+
+*The recursion “bottoms out” when the sequence to be sorted has length 1, in which
+case there is no work to be done, since every sequence of length 1 is already in
+sorted order.
+
+    Example:
+    Initial array: [4, 3, 2, 1]
+
+        [4, 3, 2, 1]
+          /        \
+       [4, 3]      [2, 1]
+        / \          / \
+      [4] [3]      [2] [1] 
+        \ /          \ /
+       [3, 4]      [1, 2]
+          \        /
+         [1, 2, 3, 4]
+
+    Final array: [4, 3, 2, 1]
