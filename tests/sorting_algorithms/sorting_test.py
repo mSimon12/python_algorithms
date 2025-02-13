@@ -28,14 +28,38 @@ class TestSorting:
         with pytest.raises(ValueError, match="Invalid input array!"):
             Sorting.bucket_sort(invalid_input)
 
+    def test_insertion_sort_empty_input(self):
+        assert [] == Sorting.insertion_sort([]), "Fail to processing empty array!"
+
+    def test_insertion_sort_single_input(self):
+        assert [5] == Sorting.insertion_sort([5]), "Fail to processing single array!"
+
     def test_insertion_sort(self, unsorted_array, sorted_array):
         assert sorted_array == Sorting.insertion_sort(unsorted_array), "Fail to sort the array!"
+
+    def test_merge_sort_empty_input(self):
+        assert [] == Sorting.merge_sort([]), "Fail to processing empty array!"
+
+    def test_merge_sort_single_input(self):
+        assert [5] == Sorting.merge_sort([5]), "Fail to processing single array!"
 
     def test_merge_sort(self, unsorted_array, sorted_array):
         assert sorted_array == Sorting.merge_sort(unsorted_array), "Fail to sort the array!"
 
+    def test_quick_sort_empty_input(self):
+        assert [] == Sorting.quick_sort([]), "Fail to processing empty array!"
+
+    def test_quick_sort_single_input(self):
+        assert [5] == Sorting.quick_sort([5]), "Fail to processing single array!"
+
     def test_quick_sort(self, unsorted_array, sorted_array):
         assert sorted_array == Sorting.quick_sort(unsorted_array), "Fail to sort the array!"
+
+    def test_bucket_sort_empty_input(self):
+        assert [] == Sorting.bucket_sort([]), "Fail to processing empty array!"
+
+    def test_bucket_sort_single_input(self):
+        assert [5] == Sorting.bucket_sort([5]), "Fail to processing single array!"
 
     def test_bucket_sort(self, unsorted_array, sorted_array):
         assert sorted_array == Sorting.bucket_sort(unsorted_array), "Fail to sort the array!"
