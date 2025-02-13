@@ -133,7 +133,34 @@ class Sorting:
 
         return i + 1
 
+    @classmethod
+    def bucket_sort(cls, input_array):
+        """
+            Sort the input array with Bucket Sort algorithm
+        :param input_array: array to be sorted
+        :return: array sorted by ascending values
+        """
+        array = cls.process_input(input_array)
 
+        # Create buckets
+        amount_of_buckets = len(array)
+        buckets = [ [] for _ in range(amount_of_buckets) ]
+        min_value = min(array)
+        max_value = max(array)
+        bucket_size = (max_value - min_value)/ amount_of_buckets
+
+        # Distribute items in buckets
+        for value in array:
+            bucket_idx = int((value - min_value) / bucket_size)
+            if bucket_idx == amount_of_buckets:
+                bucket_idx -= 1
+            buckets[bucket_idx].append(value)
+
+        # Sort bucket by bucket
+        for idx in range(amount_of_buckets):
+            buckets[idx] = cls.insertion_sort(buckets[idx])
+
+        return sum(buckets, [])
 
 
 def main():
@@ -145,6 +172,14 @@ def main():
     sorted_array = Sorting.merge_sort(unsorted_array)
     print("\nInitial array: ", unsorted_array)
     print("Merge Sort: ", sorted_array)
+
+    sorted_array = Sorting.quick_sort(unsorted_array)
+    print("\nInitial array: ", unsorted_array)
+    print("Quick Sort: ", sorted_array)
+
+    sorted_array = Sorting.bucket_sort(unsorted_array)
+    print("\nInitial array: ", unsorted_array)
+    print("Bucket Sort: ", sorted_array)
 
 
 if __name__ == "__main__":

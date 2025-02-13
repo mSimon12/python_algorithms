@@ -25,6 +25,9 @@ class TestSorting:
         with pytest.raises(ValueError, match="Invalid input array!"):
             Sorting.quick_sort(invalid_input)
 
+        with pytest.raises(ValueError, match="Invalid input array!"):
+            Sorting.bucket_sort(invalid_input)
+
     def test_insertion_sort(self, unsorted_array, sorted_array):
         assert sorted_array == Sorting.insertion_sort(unsorted_array), "Fail to sort the array!"
 
@@ -33,3 +36,6 @@ class TestSorting:
 
     def test_quick_sort(self, unsorted_array, sorted_array):
         assert sorted_array == Sorting.quick_sort(unsorted_array), "Fail to sort the array!"
+
+    def test_bucket_sort(self, unsorted_array, sorted_array):
+        assert sorted_array == Sorting.bucket_sort(unsorted_array), "Fail to sort the array!"

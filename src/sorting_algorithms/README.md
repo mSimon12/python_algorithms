@@ -116,3 +116,49 @@ efficient in-place sorting.
             Combine: [] + [3] + [4] → [3, 4].
 
     Final combination: [1] + [2] + [3, 4] → Sorted array: [1, 2, 3, 4].
+
+## Bucket Sort
+Bucket Sort is a **distribution-based sorting algorithm** that works by dividing elements 
+into multiple "buckets" and then sorting each bucket individually. It becomes very useful
+when the range for the values is known. The steps of the algorithm are:
+1. **Create Buckets**: Divide the input array into a fixed number of buckets. 
+Each bucket represents a range of values.
+2. **Distribute Elements**: Place each element into its appropriate bucket based on its value.
+3. **Sort Individual Buckets**: Sort each bucket using another sorting algorithm 
+(e.g., Insertion Sort, Merge Sort, or QuickSort).
+4. **Concatenate Buckets**: Combine the sorted buckets to get the final sorted array.
+
+If the data is **uniformly distributed** resulting in one value per bucket, Bucket Sort 
+runs in **O(n + k)** time, where n is the number of elements and k is the number of buckets. Since k is often chosen as O(n), 
+the time complexity simplifies to **O(n)**.
+The worst case is when ll elements land in the same bucket and sorting within buckets 
+is inefficient, the worst case can degrade to **O(n²)** 
+(e.g., if we use an inefficient sorting algorithm like Insertion Sort).
+
+    Example:
+    Initial array: [3, 95, 15, 92, 4, 89, 30, 91, 2, 99]
+
+    Step 1: Create Buckets
+    We'll use 10 buckets, each covering a range of 10 values:
+        Bucket 0: [0-9]
+        Bucket 1: [10-19]
+        …
+        Bucket 9: [90-99]
+
+    Step 2: Distribute Elements into Buckets
+        Bucket 0 (0-9): [3, 4, 2]
+        Bucket 1 (10-19): [15]
+        Bucket 3 (30-39): [30]
+        Bucket 8 (80-89): [89]
+        Bucket 9 (90-99): [95, 92, 91, 99]
+
+    Step 3: Sort Each Bucket
+        Bucket 0: [2, 3, 4]
+        Bucket 1: [15]
+        Bucket 3: [30]
+        Bucket 8: [89]
+        Bucket 9: [91, 92, 95, 99]
+
+    Step 4: Concatenate Buckets
+
+    Final Sorted Array: [2, 3, 4, 15, 30, 89, 91, 92, 95, 99].
