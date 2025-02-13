@@ -144,6 +144,9 @@ class Sorting:
 
         # Create buckets
         amount_of_buckets = len(array)
+        if amount_of_buckets < 2:
+            return input_array
+
         buckets = [ [] for _ in range(amount_of_buckets) ]
         min_value = min(array)
         max_value = max(array)
@@ -162,25 +165,3 @@ class Sorting:
 
         return sum(buckets, [])
 
-
-def main():
-    unsorted_array = [3500, -8, 10, 1, -98, 56, 1000, 0, 70]
-    sorted_array = Sorting.insertion_sort(unsorted_array)
-    print("Initial array: ", unsorted_array)
-    print("Insertion Sort: ", sorted_array)
-
-    sorted_array = Sorting.merge_sort(unsorted_array)
-    print("\nInitial array: ", unsorted_array)
-    print("Merge Sort: ", sorted_array)
-
-    sorted_array = Sorting.quick_sort(unsorted_array)
-    print("\nInitial array: ", unsorted_array)
-    print("Quick Sort: ", sorted_array)
-
-    sorted_array = Sorting.bucket_sort(unsorted_array)
-    print("\nInitial array: ", unsorted_array)
-    print("Bucket Sort: ", sorted_array)
-
-
-if __name__ == "__main__":
-    main()
