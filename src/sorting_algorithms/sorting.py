@@ -29,6 +29,32 @@ class Sorting:
 
         return array
 
+    @classmethod
+    def merge_sort(cls, input_array):
+        """
+            Sort the input array with Merge Sort algorithm
+        :param input_array: array to be sorted
+        :return: array sorted by ascending values
+        """
+        array = cls.process_input(input_array)
+        cls.__recursive_merge_sort(array, 0 , len(array) - 1)
+        return array
+
+    @classmethod
+    def __recursive_merge_sort(cls, array, left_idx, right_idx):
+        """
+            Recurssively breaks the array in 2 sub-arrays and merge it back
+        :param array: array being sorted
+        :param left_idx: left side of the sub-array
+        :param right_idx: right side of the sub-array
+        :return: None
+        """
+        if left_idx < right_idx:
+            middle = int((left_idx + right_idx) / 2)
+            cls.__recursive_merge_sort(array, left_idx, middle)
+            cls.__recursive_merge_sort(array, middle + 1, right_idx)
+            cls.__merge(array, left_idx, middle, right_idx)
+
     @staticmethod
     def __merge(array, left, middle, right):
         """
@@ -55,30 +81,50 @@ class Sorting:
                 j += 1
 
     @classmethod
-    def __recursive_merge_sort(cls, array, left_idx, right_idx):
+    def quick_sort(cls, input_array):
         """
-            Recurssively breaks the array in 2 sub-arrays and merge it back
-        :param array: array being sorted
-        :param left_idx: left side of the sub-array
-        :param right_idx: right side of the sub-array
-        :return: None
-        """
-        if left_idx < right_idx:
-            middle = int((left_idx + right_idx) / 2)
-            cls.__recursive_merge_sort(array, left_idx, middle)
-            cls.__recursive_merge_sort(array, middle + 1, right_idx)
-            cls.__merge(array, left_idx, middle, right_idx)
-
-    @classmethod
-    def merge_sort(cls, input_array):
-        """
-            Sort the input array with Merge Sort algorithm
+            Sort the input array with Quicksort algorithm
         :param input_array: array to be sorted
         :return: array sorted by ascending values
         """
         array = cls.process_input(input_array)
-        cls.__recursive_merge_sort(array, 0 , len(array) - 1)
+        cls.__recursive_quick_sort(array, 0 , len(array) - 1)
         return array
+
+    @classmethod
+    def __recursive_quick_sort(cls, array, left_idx, right_idx):
+        if left_idx < right_idx:
+            middle = cls.__partition(array, left_idx, right_idx)
+            cls.__recursive_quick_sort(array, left_idx, middle-1)
+            cls.__recursive_quick_sort(array, middle+1, right_idx)
+
+    @staticmethod
+    def __partition(array, left, right):
+        """
+            Method that rearranges the sub-array in place into 3 sector:
+            left - values smaller than pivot (rightest value)
+            right - values bigger than pivot
+            middle - pivot itself
+        :param array: array being sorted
+        :param left: left side of the sub-array
+        :param right: right side of the sub-array
+        :return: None
+        """
+        pivot = array[right]
+        i = left - 1
+        for j in range(left, right):
+            if array[j] <= pivot:
+                i += 1
+                aux = array[i]
+                array[i] = array[j]
+                array[j] = aux
+        aux = array[i+1]
+        array[i+1] = array[right]
+        array[right] = aux
+
+        return i + 1
+
+
 
 
 def main():

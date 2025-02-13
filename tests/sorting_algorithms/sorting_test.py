@@ -22,9 +22,14 @@ class TestSorting:
         with pytest.raises(ValueError, match="Invalid input array!"):
             Sorting.merge_sort(invalid_input)
 
+        with pytest.raises(ValueError, match="Invalid input array!"):
+            Sorting.quick_sort(invalid_input)
+
     def test_insertion_sort(self, unsorted_array, sorted_array):
         assert sorted_array == Sorting.insertion_sort(unsorted_array), "Fail to sort the array!"
 
     def test_merge_sort(self, unsorted_array, sorted_array):
         assert sorted_array == Sorting.merge_sort(unsorted_array), "Fail to sort the array!"
 
+    def test_quick_sort(self, unsorted_array, sorted_array):
+        assert sorted_array == Sorting.quick_sort(unsorted_array), "Fail to sort the array!"
