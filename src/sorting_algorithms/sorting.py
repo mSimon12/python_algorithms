@@ -93,6 +93,15 @@ class Sorting:
 
     @classmethod
     def __recursive_quick_sort(cls, array, left_idx, right_idx):
+        """
+            Implements the partition, putting the pivot idx at the right position
+            and breaking the remaining in two subsets representing smaller and bigger values,
+            which are input in a recursion
+        :param array: array being sorted
+        :param left_idx: left side of the sub-array
+        :param right_idx: right side of the sub-array
+        :return: None
+        """
         if left_idx < right_idx:
             middle = cls.__partition(array, left_idx, right_idx)
             cls.__recursive_quick_sort(array, left_idx, middle-1)
