@@ -3,12 +3,33 @@
 Sorting algorithms are fundamental in computer science, used to arrange data in a 
 specific order, typically numerical or lexicographical. These algorithms improve 
 efficiency in searching, organizing, and processing data. Common sorting techniques 
-include **Bubble Sort, Selection Sort, Insertion Sort, Merge Sort, Quick Sort, and 
+include **Insertion Sort, Merge Sort, Quick Sort, Bucket Sort and 
 Heap Sort**, each with different time complexities and use cases. Simple algorithms 
-like **Bubble Sort** are easy to implement but inefficient for large datasets, while 
+like **Insertion Sort** are easy to implement but inefficient for large datasets, while 
 advanced ones like **Quick Sort** and **Merge Sort** offer better performance with O(n log n)
 complexity. Choosing the right sorting algorithm depends on factors like data size,
 memory constraints, and stability requirements.
+
+I have implemented here Insertion Sort, Merge Sort, Quick Sort and Bucket Sort, 
+which ca be applied as in the example below:
+
+```python
+from src.sorting_algorithms.sorting import Sorting
+unsorted_array = [3500, -8, 10, 1, -98, 56, 1000, 0, 70]
+print("Initial array: ", unsorted_array)
+
+sorted_array = Sorting.insertion_sort(unsorted_array)
+print("Insertion Sort: ", sorted_array)
+
+sorted_array = Sorting.merge_sort(unsorted_array)
+print("Merge Sort: ", sorted_array)
+
+sorted_array = Sorting.quick_sort(unsorted_array)
+print("Quick Sort: ", sorted_array)
+
+sorted_array = Sorting.bucket_sort(unsorted_array)
+print("Bucket Sort: ", sorted_array)
+```
 
 ## Insertion Sort
 The Insertion Sort is a simple algorithm the has as principle the iteration over all elements
