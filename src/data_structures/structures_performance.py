@@ -8,8 +8,8 @@ import pandas as pd
 from pympler import asizeof
 from matplotlib import pyplot as plt
 
-from data_structures.basic_data_structures import LinkedList, Queue, Stack, Node
-from data_structures.binary_tree import BinaryTree
+from src.data_structures.basic_data_structures import LinkedList, Queue, Stack, Node
+from src.data_structures.binary_tree import BinaryTree
 
 
 class MemoryAnalyzer:
@@ -237,7 +237,7 @@ class DeleteTimeAnalyzer(TimeAnalyzer):
 
 
 class Analyzer:
-    OUTPUT_DIR = "outputs"
+    OUTPUT_DIR = "../outputs"
 
     def __init__(self):
         self.__prepare_environment()
