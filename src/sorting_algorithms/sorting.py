@@ -161,7 +161,14 @@ class Sorting:
 
         # Sort bucket by bucket
         for idx in range(amount_of_buckets):
-            buckets[idx] = cls.insertion_sort(buckets[idx])
+            if len(buckets[idx]) > 1:
+                buckets[idx] = cls.merge_sort(buckets[idx])
 
-        return sum(buckets, [])
+        # Concatenate buckets
+        output_array = []
+        for bucket in buckets:
+            for item_value in bucket:
+                output_array.append(item_value)
+
+        return output_array
 
