@@ -1,16 +1,38 @@
 # Python Algorithms
 
-Performance processing an application is always welcome.
-Therefore, here I include a set of data structures and algorithms implemented to 
-execute their task in the most efficient way.
+_An **Algorithm** is any well-defined computational procedure that takes some set of values 
+as input, and produces a set of values as output_. It is a sequence of computational 
+steps that when executed will transform an input into the desired output.
 
-## Data Structures
+Some problems might arise frequently in practice, and knowing well known techniques
+for solving these problems is very useful to improve the efficiency and performance
+of the designed solutions. An example of a problem that we can face frequently is the
+need for **sorting** an amount of data. This might look as a simple problem to be solved,
+but providing an efficient way to do so is not very trivial. Therefore, in this repository
+I implement some of the most known sorting algorithms and evaluate their performance.
+Such implementations can be found at [Sorting Algorithms](src/sorting_algorithms) and the 
+performance evaluation can be found below.
+
+Another very frequent situation that might arise is the need for searching items, paths,
+minimum or maximum values, etc. For this we also have some renown algorithms, and I have 
+chosen to present just some of the most known. At [Search Algorithms](src/search_algorithms)
+I provide classes for finding items with **Linear Search** and **Binary Search** algorithms.
+Furthermore, I provide implementations of **Breadth-First Search**, **Depth-First Search** and **Dijkstra**
+algorithms, which are very useful when dealing with complex situations involving the interaction
+of multiple elements between each other.
+
+To make the implementation of such algorithms possible in an efficient manner, a set of
+Data Structures have been proposed, each with it own characteristics and benefits. Therefore,
+I also provide at [Data Structures](src/data_structures) the implementation of these structures,
+which the memory performance and processing time are presented below.
+
+## Data Structures Performance
 Data structures are fundamental components of computer science that help in organizing,
 storing, and managing data efficiently. 
 They enable optimal data manipulation, retrieval, and storage, improving the performance of algorithms. 
 Common data structures include arrays, linked lists, stacks, queues, trees, 
 and graphs, each suited for specific tasks. 
-I can consider the following table to do the best choice when deciding which one to use.
+We can consider the following table to do the best choice when deciding which one to use.
 
 | **Data Structure**    | **Access Time** | **Search Time** | **Insertion/Deletion** | **Memory Usage** | **Best Use Cases** |
 |-----------------------|----------------|-----------------|------------------------|------------------|---------------------|
@@ -67,4 +89,40 @@ hash collisions (rare cases).
  <img alt="Delete time comparison" src="src/outputs/delete_time.png" width="250">
 </p>
 
-## Algorithms
+## Sorting Algorithms Performance
+
+As was mentioned in the introduction, I have implemented here some of the most known
+sorting algorithms. The chosen algorithms are Insertion Sort, Merge Sort, Quicksort and 
+Bucket Sort, which present the time complexities listed in the table below:
+
+| Sorting Algorithm  | Best Case   | Average Case | Worst Case                                     |
+|--------------------|-------------|--------------|------------------------------------------------|
+| **Insertion Sort** | O(n)        | O(n²)        | O(n²)                                          |
+| **Merge Sort**     | O(n log n)  | O(n log n)   | O(n log n)                                     |
+| **Quicksort**      | O(n log n)  | O(n log n)   | O(n²)                                          |
+| **Bucket Sort**    | O(n + k)    | O(n + k)     | O(k + n log n) (if all elements in one bucket) |
+*k refers to number of buckets in Bucket Sort.
+
+To verify that the implementations of the sorting algorithms follow the expected time
+complexities, I have verified the performance against multiple input arrays. Below I 
+present the time required by each algorithm to sort up to 40000 elements from 3 initial arrays:
+1. Array with 40000 random values from -1000000 to 1000000.
+2. Decreasing array with values from 20000 to -20000.
+3. Array with uniformly distributed values from -200000 to 200000 with steps of 10, but
+shuffled in a random sequence.
+
+
+<p align="center">
+ <img alt="Random input array sorting time" src="src/outputs/sorting_time_random_array.png" width="250">
+ <img alt="Decreasing input array sorting time" src="src/outputs/sorting_time_decreasing_array.png" width="250">
+ <img alt="Distributed input array sorting time" src="src/outputs/sorting_time_distributed_array.png" width="250">
+</p>
+
+By the resulting plots we are able to check that **Insertion Sort** follows the n² for all 
+the situations. 
+**Merge Sort** behaves like O(n log n) for any input.
+**Quicksort** has its worst case O(n²) for the decreasing array as input, 
+which is expected since the pivot would be always in the edge. 
+And **Bucket Sort** has presented in all arrays a behavior similar to O(n log n), even with 
+a distributed input. The inclination from O(n) and O (n log n) are very similar, and together 
+with the constant factors, it becomes difficult to differentiate both.

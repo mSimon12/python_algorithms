@@ -1,5 +1,11 @@
 # Data Structures
-    
+Data structures are fundamental components of computer science that help in organizing,
+storing, and managing data efficiently. 
+They enable optimal data manipulation, retrieval, and storage, improving the performance of algorithms. 
+Common data structures include arrays, linked lists, stacks, queues, trees, 
+and graphs, each suited for specific tasks. Below you can find examples of implementations
+of these data structures and how to make use of it in your own projects.
+
 ## Linked List
 A Linked List is a sequence of elements that are linked to each other, but do
 not require to be in sequence in the memory. Different from what usually happens
