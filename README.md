@@ -101,6 +101,7 @@ Bucket Sort, which present the time complexities listed in the table below:
 | **Merge Sort**     | O(n log n)  | O(n log n)   | O(n log n)                                     |
 | **Quicksort**      | O(n log n)  | O(n log n)   | O(n²)                                          |
 | **Bucket Sort**    | O(n + k)    | O(n + k)     | O(k + n log n) (if all elements in one bucket) |
+
 *k refers to number of buckets in Bucket Sort.
 
 To verify that the implementations of the sorting algorithms follow the expected time
